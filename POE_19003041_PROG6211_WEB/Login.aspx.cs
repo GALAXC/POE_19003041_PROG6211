@@ -41,7 +41,7 @@ namespace POE_19003041_PROG6211_WEB
             {
                 if (passwordList.IndexOf(startLogin.Password) == usernameList.IndexOf(startLogin.UserName))
                 {
-                    Response.Redirect("~/Default");
+                    Response.Redirect("~/About");
                 }
             }
             else
