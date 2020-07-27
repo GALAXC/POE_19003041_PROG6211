@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Data.SqlClient;
+using System.Collections;
 
 namespace POE_19003041_PROG6211
 {
@@ -15,11 +17,40 @@ namespace POE_19003041_PROG6211
         public static String loggedInUser = "";
         public static Boolean isUserAdmin = false;
         private Boolean passwordButtonStatus = true;
+        private static SqlConnection con = new SqlConnection();
+        private ArrayList usernameList;
+        private ArrayList passwordList;
+        private ArrayList userType;
 
         //Center welcome label
         private void Login_Load(object sender, EventArgs e)
         {
             loginWelcomeLabel.Location = new System.Drawing.Point((this.Size.Width / 2) - (loginWelcomeLabel.Size.Width / 2), 9);
+            String command = "SELECT * FROM TBL_LOGINDETAILS;";
+            //Section for temporary local database storage for use in both projects (WEB + WINDOWS)
+            String path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "../../../POE_19003041_PROG6211_WEB/App_Data");
+            AppDomain.CurrentDomain.SetData("DataDirectory", path);
+            //
+
+            con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\POE_Database.mdf;Integrated Security=True";
+            con.Open();
+            using (con)
+            {
+                SqlCommand SQLusernames = new SqlCommand(command, con);
+                SqlDataReader usernames = SQLusernames.ExecuteReader();
+                usernameList = new ArrayList();
+                passwordList = new ArrayList();
+                userType = new ArrayList();
+                if (usernames.HasRows)
+                {
+                    while (usernames.Read())
+                    {
+                        usernameList.Add(usernames.GetValue(0));
+                        passwordList.Add(usernames.GetValue(1));
+                        userType.Add(usernames.GetValue(2));
+                    }
+                }
+            }
         }
 
         private void loginQuitButton_Click(object sender, EventArgs e)
@@ -30,42 +61,34 @@ namespace POE_19003041_PROG6211
         //Read LoginDetails.txt file and compare it against user entered login details
         private void loginButton_Click(object sender, EventArgs e)
         {
-            string[] login = System.IO.File.ReadAllLines("../../LoginDetails.txt");
             if (loginUsernameBox.Text != "" && loginPasswordBox.Text != "")
             {
-                if (login.Contains(loginUsernameBox.Text))
+                if (usernameList.Contains(loginUsernameBox.Text))
                 {
-                    for (int i = 0; i < login.Length; i++)
+                    if (loginPasswordBox.Text == Convert.ToString(passwordList[usernameList.IndexOf(loginUsernameBox.Text)]))
                     {
-                        if (loginUsernameBox.Text == login[i])
+                        loggedInUser = loginUsernameBox.Text;
+                        if (Convert.ToString(userType[usernameList.IndexOf(loginUsernameBox.Text)]) == "1")
                         {
-                            if (login[i + 1] == loginPasswordBox.Text)
-                            {
-                                String tempPassword = login[i + 1];
-                                loggedInUser = loginUsernameBox.Text;
-                                if (login[i + 2] == "1")
-                                {
-                                    isUserAdmin = true;
-                                }
-                                else
-                                {
-                                    isUserAdmin = false;
-                                }
-                                this.Hide();
-                                Report newReport = new Report();
-                                newReport.ShowDialog();
-                                this.Close();
-                            }
-                            else
-                            {
-                                MessageBox.Show("The password you have entered for this username is incorrect.");
-                            }
+                            isUserAdmin = true;
                         }
+                        else
+                        {
+                            isUserAdmin = false;
+                        }
+                        this.Hide();
+                        Report newReport = new Report();
+                        newReport.ShowDialog();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Login failed. \nPlease ensure the details you have entered are correct and try again.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("The username you have entered cannot be found.");
+                    MessageBox.Show("Login failed. \nPlease ensure the details you have entered are correct and try again.");
                 }
             }
             else
