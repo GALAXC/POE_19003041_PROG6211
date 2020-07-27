@@ -39,13 +39,11 @@ namespace POE_19003041_PROG6211_WEB
         {
             if (usernameList.Contains(startLogin.UserName))
             {
-                if (passwordList.IndexOf(startLogin.Password) == usernameList.IndexOf(startLogin.UserName))
+                startLogin.FailureText = "Your login attempt was not successful. Please try again.";
+                if (startLogin.Password == Convert.ToString(passwordList[usernameList.IndexOf(startLogin.UserName)]))
                 {
                     Response.Redirect("~/About");
                 }
-            }
-            else
-            {
             }
         }
     }

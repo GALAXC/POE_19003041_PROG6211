@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Data.SqlClient;
 using System.IO;
+using System.Web.UI.WebControls;
+using System.Windows.Forms;
 
 namespace POE_19003041_PROG6211
 {
@@ -13,14 +16,14 @@ namespace POE_19003041_PROG6211
         private static ArrayList precips = new ArrayList();
         private static ArrayList humidities = new ArrayList();
         private static ArrayList windSpeeds = new ArrayList();
+        private static ArrayList newEntry = new ArrayList();
+        private static SqlConnection con = new SqlConnection();
 
         //Getters and Setters
         public static void addWeatherDate(object value)
         {
-            using (StreamWriter weatherInput = new StreamWriter("../../WeatherData.txt", true))
-            {
-                weatherInput.WriteLine(value);
-            }
+            newEntry.Add(true);
+            weatherDates.Add(value);
         }
 
         public static DateTime getWeatherDate(int value)
@@ -30,10 +33,7 @@ namespace POE_19003041_PROG6211
 
         public static void addMinTemp(object value)
         {
-            using (StreamWriter weatherInput = new StreamWriter("../../WeatherData.txt", true))
-            {
-                weatherInput.WriteLine(value);
-            }
+            minTemps.Add(value);
         }
 
         public static string getMinTemp(int value)
@@ -43,10 +43,7 @@ namespace POE_19003041_PROG6211
 
         public static void addMaxTemp(object value)
         {
-            using (StreamWriter weatherInput = new StreamWriter("../../WeatherData.txt", true))
-            {
-                weatherInput.WriteLine(value);
-            }
+            maxTemps.Add(value);
         }
 
         public static string getMaxTemp(int value)
@@ -56,10 +53,7 @@ namespace POE_19003041_PROG6211
 
         public static void addPrecipitation(object value)
         {
-            using (StreamWriter weatherInput = new StreamWriter("../../WeatherData.txt", true))
-            {
-                weatherInput.WriteLine(value);
-            }
+            precips.Add(value);
         }
 
         public static string getPrecipitation(int value)
@@ -69,10 +63,7 @@ namespace POE_19003041_PROG6211
 
         public static void addHumidity(object value)
         {
-            using (StreamWriter weatherInput = new StreamWriter("../../WeatherData.txt", true))
-            {
-                weatherInput.WriteLine(value);
-            }
+            humidities.Add(value);
         }
 
         public static string getHumidity(int value)
@@ -82,10 +73,7 @@ namespace POE_19003041_PROG6211
 
         public static void addWindSpeed(object value)
         {
-            using (StreamWriter weatherInput = new StreamWriter("../../WeatherData.txt", true))
-            {
-                weatherInput.WriteLine(value);
-            }
+            windSpeeds.Add(value);
         }
 
         public static string getWindSpeed(int value)
@@ -95,10 +83,7 @@ namespace POE_19003041_PROG6211
 
         public static void addCityName(object value)
         {
-            using (StreamWriter weatherInput = new StreamWriter("../../WeatherData.txt", true))
-            {
-                weatherInput.WriteLine(value);
-            }
+            cityNames.Add(value);
         }
 
         public static string getCityName(int value)
@@ -122,17 +107,26 @@ namespace POE_19003041_PROG6211
             humidities.Clear();
             windSpeeds.Clear();
 
-            using (StreamReader weatherOutput = new StreamReader("../../WeatherData.txt"))
+            String command = "SELECT * FROM TBL_WEATHER";
+            SetConnectionString();
+            con.Open();
+            using (con)
             {
-                for (int i = 0; i < (TotalLines("../../WeatherData.txt") / 7); i++)
+                SqlCommand sqlWeather = new SqlCommand(command, con);
+                SqlDataReader weather = sqlWeather.ExecuteReader();
+                if (weather.HasRows)
                 {
-                    cityNames.Add(weatherOutput.ReadLine());
-                    weatherDates.Add(weatherOutput.ReadLine());
-                    minTemps.Add(weatherOutput.ReadLine());
-                    maxTemps.Add(weatherOutput.ReadLine());
-                    precips.Add(weatherOutput.ReadLine());
-                    humidities.Add(weatherOutput.ReadLine());
-                    windSpeeds.Add(weatherOutput.ReadLine());
+                    while (weather.Read())
+                    {
+                        cityNames.Add(weather.GetValue(0));
+                        weatherDates.Add(weather.GetValue(1));
+                        minTemps.Add(weather.GetValue(2));
+                        maxTemps.Add(weather.GetValue(3));
+                        precips.Add(weather.GetValue(4));
+                        humidities.Add(weather.GetValue(5));
+                        windSpeeds.Add(weather.GetValue(6));
+                        newEntry.Add(false);
+                    }
                 }
             }
         }
@@ -145,6 +139,36 @@ namespace POE_19003041_PROG6211
                 int i = 0;
                 while (r.ReadLine() != null) { i++; }
                 return i;
+            }
+        }
+
+        private static void SetConnectionString()
+        {
+            //Section for temporary local database storage for use in both projects (WEB + WINDOWS)
+            String path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "../../../POE_19003041_PROG6211_WEB/App_Data");
+            AppDomain.CurrentDomain.SetData("DataDirectory", path);
+            //
+
+            con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\POE_Database.mdf;Integrated Security=True";
+        }
+
+        //Update database with new values based on if it was in the database before or not
+        public static void UpdateDatabase()
+        {
+            SetConnectionString();
+            con.Open();
+            using (con)
+            {
+                for (int i = 0; i < newEntry.Count; i++)
+                {
+                    if (Convert.ToBoolean(newEntry[i]) == true)
+                    {
+                        String command = String.Format("INSERT INTO TBL_WEATHER VALUES ('{0}','{1}',{2},{3},{4},{5},{6})", Weather.getCityName(i), Weather.getWeatherDate(i), Weather.getMinTemp(i), Weather.getMaxTemp(i), Weather.getPrecipitation(i), Weather.getHumidity(i), Weather.getWindSpeed(i));
+                        SqlCommand sqlWeather = new SqlCommand(command, con);
+                        sqlWeather.ExecuteNonQuery();
+                        newEntry[i] = false;
+                    }
+                }
             }
         }
     }

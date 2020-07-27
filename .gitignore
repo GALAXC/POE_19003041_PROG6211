@@ -343,3 +343,4 @@ healthchecksdb
 PrintableReport.txt
 Changes.txt
 README.txt
+/testDataQuery.sql

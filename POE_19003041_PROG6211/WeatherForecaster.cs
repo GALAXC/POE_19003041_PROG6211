@@ -15,6 +15,7 @@ namespace POE_19003041_PROG6211
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             fileCheckAndRun();
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
         }
 
         //Check files needed (Weather and Login Data) are available and runs the program if they are
@@ -33,6 +34,11 @@ namespace POE_19003041_PROG6211
             {
                 MessageBox.Show("One or more files required for the program to run are missing. Please make sure the WeatherData.txt and LoginDetails.txt files are in the project folder (The same folder as the source files) and try again.");
             }
+        }
+
+        private static void OnProcessExit(object sender, EventArgs e)
+        {
+            Weather.UpdateDatabase();
         }
     }
 }

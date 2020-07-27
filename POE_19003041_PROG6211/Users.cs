@@ -225,7 +225,6 @@ namespace POE_19003041_PROG6211
         {
             this.Hide();
             Report reportForm = new Report();
-            Weather.populateArrayLists();
             reportForm.ShowDialog();
             this.Close();
         }

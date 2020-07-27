@@ -67,7 +67,6 @@ namespace POE_19003041_PROG6211
                         lines[editBox.SelectedIndex * 7 + 6] = Convert.ToString(windBox.Text);
                         System.IO.File.WriteAllLines("../../WeatherData.txt", lines);
                         MessageBox.Show("You have successfully updated this weather entry.");
-                        Weather.populateArrayLists();
                         int oldIndex = editBox.SelectedIndex;
                         updateUpdateBox();
                         editBox.SelectedIndex = oldIndex;
@@ -292,7 +291,6 @@ namespace POE_19003041_PROG6211
         {
             this.Hide();
             Report reportForm = new Report();
-            Weather.populateArrayLists();
             reportForm.ShowDialog();
             this.Close();
         }

@@ -42,7 +42,6 @@ namespace POE_19003041_PROG6211
                 Weather.addPrecipitation(precipBox.Text);
                 Weather.addHumidity(humidBox.Text);
                 Weather.addWindSpeed(windBox.Text);
-                Weather.populateArrayLists();
                 MessageBox.Show("Data Captured Successfully.");
             }
             else
@@ -251,11 +250,13 @@ namespace POE_19003041_PROG6211
         //
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Weather.UpdateDatabase();
             this.Close();
         }
 
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Weather.UpdateDatabase();
             Report.firstTimeLoad = true;
             this.Hide();
             Login newLogin = new Login();
@@ -265,15 +266,16 @@ namespace POE_19003041_PROG6211
 
         private void reportStrip_Click(object sender, EventArgs e)
         {
+            Weather.UpdateDatabase();
             this.Hide();
             Report reportForm = new Report();
-            Weather.populateArrayLists();
             reportForm.ShowDialog();
             this.Close();
         }
 
         private void updateStrip_Click(object sender, EventArgs e)
         {
+            Weather.UpdateDatabase();
             this.Hide();
             Update newUpdate = new Update();
             newUpdate.ShowDialog();
@@ -282,6 +284,7 @@ namespace POE_19003041_PROG6211
 
         private void usersStrip_Click(object sender, EventArgs e)
         {
+            Weather.UpdateDatabase();
             this.Hide();
             Users newUsers = new Users();
             newUsers.ShowDialog();
