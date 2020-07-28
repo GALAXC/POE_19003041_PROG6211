@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace POE_19003041_PROG6211
@@ -19,11 +12,12 @@ namespace POE_19003041_PROG6211
         }
 
         private Boolean valuesGood = true;
+        private static readonly SqlConnection con = new SqlConnection();
 
         //Set up screen on log in
         private void Edit_Load(object sender, EventArgs e)
         {
-            updateUpdateBox();
+            UpdateUpdateBox();
             updateLabel.Location = new System.Drawing.Point((this.Size.Width / 2) - (updateLabel.Size.Width / 2), 39);
             loginStrip.Text = "Logged in as: " + Login.loggedInUser;
             if (editBox.Items.Count != 0)
@@ -33,42 +27,44 @@ namespace POE_19003041_PROG6211
         }
 
         //Display details of result on click
-        private void editBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void EditBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cityBox.Text = Weather.getCityName(editBox.SelectedIndex);
-            dateInputBox.Value = Weather.getWeatherDate(editBox.SelectedIndex);
-            minTempBox.Text = Weather.getMinTemp(editBox.SelectedIndex);
-            maxTempBox.Text = Weather.getMaxTemp(editBox.SelectedIndex);
-            precipBox.Text = Weather.getPrecipitation(editBox.SelectedIndex);
-            humidBox.Text = Weather.getHumidity(editBox.SelectedIndex);
-            windBox.Text = Weather.getWindSpeed(editBox.SelectedIndex);
+            cityBox.Text = Weather.GetCityName(editBox.SelectedIndex);
+            dateInputBox.Value = Weather.GetWeatherDate(editBox.SelectedIndex);
+            minTempBox.Text = Weather.GetMinTemp(editBox.SelectedIndex);
+            maxTempBox.Text = Weather.GetMaxTemp(editBox.SelectedIndex);
+            precipBox.Text = Weather.GetPrecipitation(editBox.SelectedIndex);
+            humidBox.Text = Weather.GetHumidity(editBox.SelectedIndex);
+            windBox.Text = Weather.GetWindSpeed(editBox.SelectedIndex);
         }
 
         //Update currently selected result with new details
-        private void updateButton_Click(object sender, EventArgs e)
+        private void UpdateButton_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("This will update the selected forecast with the new information you have entered.\nAre you sure?", "Update Forecast?", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                checkValues();
+                CheckValues();
                 if (valuesGood == true && cityBox.Text != "")
                 {
                     PasswordCheck newPasswordCheck = new PasswordCheck();
                     newPasswordCheck.ShowDialog();
                     if (PasswordCheck.allowUser == true)
                     {
-                        string[] lines = System.IO.File.ReadAllLines("../../WeatherData.txt");
-                        lines[editBox.SelectedIndex * 7] = cityBox.Text;
-                        lines[editBox.SelectedIndex * 7 + 1] = Convert.ToString(dateInputBox.Value);
-                        lines[editBox.SelectedIndex * 7 + 2] = Convert.ToString(minTempBox.Text);
-                        lines[editBox.SelectedIndex * 7 + 3] = Convert.ToString(maxTempBox.Text);
-                        lines[editBox.SelectedIndex * 7 + 4] = Convert.ToString(precipBox.Text);
-                        lines[editBox.SelectedIndex * 7 + 5] = Convert.ToString(humidBox.Text);
-                        lines[editBox.SelectedIndex * 7 + 6] = Convert.ToString(windBox.Text);
-                        System.IO.File.WriteAllLines("../../WeatherData.txt", lines);
+                        String path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "../../../POE_19003041_PROG6211_WEB/App_Data");
+                        AppDomain.CurrentDomain.SetData("DataDirectory", path);
+                        con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\POE_Database.mdf;Integrated Security=True";
+                        String command = String.Format("UPDATE TBL_WEATHER SET CITYNAME = '{0}', \"DATE\" = '{1}', MINTEMP = {2}, MAXTEMP = {3}, PRECIPITATION = {4}, HUMIDITY = {5}, WINDSPEED = {6} WHERE (CITYNAME = '{7}') AND (DATE = '{8}');", cityBox.Text, dateInputBox.Value, minTempBox.Text, maxTempBox.Text, precipBox.Text, humidBox.Text, windBox.Text, Weather.GetCityName(editBox.SelectedIndex), Weather.GetWeatherDate(editBox.SelectedIndex));
+                        con.Open();
+                        using (con)
+                        {
+                            SqlCommand sqlWeather = new SqlCommand(command, con);
+                            sqlWeather.ExecuteNonQuery();
+                        }
                         MessageBox.Show("You have successfully updated this weather entry.");
+                        Weather.PopulateArrayLists();
                         int oldIndex = editBox.SelectedIndex;
-                        updateUpdateBox();
+                        UpdateUpdateBox();
                         editBox.SelectedIndex = oldIndex;
                     }
                 }
@@ -83,31 +79,31 @@ namespace POE_19003041_PROG6211
         }
 
         //Update the result box
-        private void updateUpdateBox()
+        private void UpdateUpdateBox()
         {
             editBox.Items.Clear();
-            for (int i = 0; i < (Weather.TotalLines(@"../../WeatherData.txt") / 7); i++)
+            for (int i = 0; i < Weather.GetCityNameCount(); i++)
             {
-                editBox.Items.Add(Weather.getCityName(i) + " - " + Weather.getWeatherDate(i));
+                editBox.Items.Add(Weather.GetCityName(i) + " - " + Weather.GetWeatherDate(i));
             }
         }
 
         //Check if any incorrect values have been copy pasted into capture boxes
-        private void checkValues()
+        private void CheckValues()
         {
             valuesGood = true;
-            valueCheckText(cityBox.Text, 0);
-            valueCheck(minTempBox.Text, 0);
-            valueCheck(maxTempBox.Text, 0);
-            valueCheck(precipBox.Text, 0);
-            valueCheck(humidBox.Text, 0);
-            valueCheck(windBox.Text, 0);
+            ValueCheckText(cityBox.Text);
+            ValueCheck(minTempBox.Text);
+            ValueCheck(maxTempBox.Text);
+            ValueCheck(precipBox.Text);
+            ValueCheck(humidBox.Text);
+            ValueCheck(windBox.Text);
         }
 
         //Check numeric values are entered correctly
-        private void valueCheck(string tempVar1, int tempOut1)
+        private void ValueCheck(string tempVar1)
         {
-            if ((int.TryParse(tempVar1, out tempOut1)) && valuesGood == true)
+            if ((int.TryParse(tempVar1, out _)) && valuesGood == true)
             {
             }
             else
@@ -117,9 +113,9 @@ namespace POE_19003041_PROG6211
         }
 
         //Check text values are entered correctly
-        private void valueCheckText(string tempVar1, int tempOut1)
+        private void ValueCheckText(string tempVar1)
         {
-            if ((int.TryParse(tempVar1, out tempOut1)) && valuesGood == true)
+            if ((int.TryParse(tempVar1, out _)) && valuesGood == true)
             {
                 valuesGood = false;
             }
@@ -159,7 +155,7 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        private void minTempBox_TextChanged(object sender, EventArgs e)
+        private void MinTempBox_TextChanged(object sender, EventArgs e)
         {
             if (minTempBox.Text == "")
             {
@@ -189,7 +185,7 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        private void maxTempBox_TextChanged(object sender, EventArgs e)
+        private void MaxTempBox_TextChanged(object sender, EventArgs e)
         {
             if (maxTempBox.Text == "")
             {
@@ -218,8 +214,7 @@ namespace POE_19003041_PROG6211
             {
                 precipBox.Text = "0";
             }
-            int successInt;
-            if (int.TryParse(precipBox.Text, out successInt))
+            if (int.TryParse(precipBox.Text, out int successInt))
             {
                 if (successInt > 100)
                 {
@@ -238,14 +233,13 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        private void humidBox_TextChanged(object sender, EventArgs e)
+        private void HumidBox_TextChanged(object sender, EventArgs e)
         {
             if (humidBox.Text == "")
             {
                 humidBox.Text = "0";
             }
-            int successInt;
-            if (int.TryParse(humidBox.Text, out successInt))
+            if (int.TryParse(humidBox.Text, out int successInt))
             {
                 if (successInt > 100)
                 {
@@ -264,7 +258,7 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        private void windBox_TextChanged(object sender, EventArgs e)
+        private void WindBox_TextChanged(object sender, EventArgs e)
         {
             if (windBox.Text == "")
             {
@@ -273,12 +267,12 @@ namespace POE_19003041_PROG6211
         }
 
         //Tool Strip Items
-        private void exitStrip_Click(object sender, EventArgs e)
+        private void ExitStrip_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void logoutStrip_Click(object sender, EventArgs e)
+        private void LogoutStrip_Click(object sender, EventArgs e)
         {
             Report.firstTimeLoad = true;
             this.Hide();
@@ -287,7 +281,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void reportStrip_Click(object sender, EventArgs e)
+        private void ReportStrip_Click(object sender, EventArgs e)
         {
             this.Hide();
             Report reportForm = new Report();
@@ -295,7 +289,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void captureStrip_Click(object sender, EventArgs e)
+        private void CaptureStrip_Click(object sender, EventArgs e)
         {
             this.Hide();
             Capture newCapture = new Capture();
@@ -303,7 +297,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void usersStrip_Click(object sender, EventArgs e)
+        private void UsersStrip_Click(object sender, EventArgs e)
         {
             this.Hide();
             Users newUsers = new Users();

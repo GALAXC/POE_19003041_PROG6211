@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Web.UI.WebControls;
-using System.Collections;
 
 namespace POE_19003041_PROG6211_WEB
 {
     public partial class Login : System.Web.UI.Page
     {
-        private static SqlConnection con = new SqlConnection();
+        private static readonly SqlConnection con = new SqlConnection();
         private ArrayList usernameList;
         private ArrayList passwordList;
 
@@ -35,7 +34,7 @@ namespace POE_19003041_PROG6211_WEB
             }
         }
 
-        protected void startLogin_Authenticate(object sender, AuthenticateEventArgs e)
+        protected void StartLogin_Authenticate(object sender, AuthenticateEventArgs e)
         {
             if (usernameList.Contains(startLogin.UserName))
             {

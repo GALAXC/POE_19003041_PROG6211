@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace POE_19003041_PROG6211
@@ -21,7 +14,7 @@ namespace POE_19003041_PROG6211
         private Boolean passwordButtonStatus = true;
 
         //Form for security checking the password
-        private void passwordCheck_Load(object sender, EventArgs e)
+        private void PasswordCheck_Load(object sender, EventArgs e)
         {
             passwordCheckLabel.Text = "Please enter the password for: " + Login.loggedInUser;
             passwordCheckLabel.Location = new System.Drawing.Point(((this.Size.Width / 2) - (passwordCheckLabel.Size.Width / 2)) - 8, 26);
@@ -29,14 +22,14 @@ namespace POE_19003041_PROG6211
             allowUser = false;
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             allowUser = false;
             this.Close();
         }
 
         //Compare password and allow/disallow access
-        private void okButton_Click(object sender, EventArgs e)
+        private void OkButton_Click(object sender, EventArgs e)
         {
             string[] login = System.IO.File.ReadAllLines("../../LoginDetails.txt");
             for (int i = 0; i < login.Length; i++)
@@ -57,7 +50,7 @@ namespace POE_19003041_PROG6211
         }
 
         //Show/Hide password
-        private void showHidePasswordButton_Click(object sender, EventArgs e)
+        private void ShowHidePasswordButton_Click(object sender, EventArgs e)
         {
             //Password button status = True if the password is hidden
             if (passwordButtonStatus == true)

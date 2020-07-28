@@ -1,9 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace POE_19003041_PROG6211_WEB
 {
@@ -11,7 +6,6 @@ namespace POE_19003041_PROG6211_WEB
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

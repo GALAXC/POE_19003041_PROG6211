@@ -62,7 +62,7 @@
             this.okButton.TabIndex = 2;
             this.okButton.Text = "Ok";
             this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            this.okButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
             // cancelButton
             // 
@@ -72,7 +72,7 @@
             this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // showHidePasswordButton
             // 
@@ -84,7 +84,7 @@
             this.showHidePasswordButton.Size = new System.Drawing.Size(23, 23);
             this.showHidePasswordButton.TabIndex = 178;
             this.showHidePasswordButton.UseVisualStyleBackColor = false;
-            this.showHidePasswordButton.Click += new System.EventHandler(this.showHidePasswordButton_Click);
+            this.showHidePasswordButton.Click += new System.EventHandler(this.ShowHidePasswordButton_Click);
             // 
             // PasswordCheck
             // 
@@ -102,7 +102,7 @@
             this.Name = "PasswordCheck";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Weather Forecaster - Security Check";
-            this.Load += new System.EventHandler(this.passwordCheck_Load);
+            this.Load += new System.EventHandler(this.PasswordCheck_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -2,102 +2,107 @@
 using System.Collections;
 using System.Data.SqlClient;
 using System.IO;
-using System.Web.UI.WebControls;
-using System.Windows.Forms;
 
 namespace POE_19003041_PROG6211
 {
     public static class Weather
     {
-        private static ArrayList cityNames = new ArrayList();
-        private static ArrayList weatherDates = new ArrayList();
-        private static ArrayList minTemps = new ArrayList();
-        private static ArrayList maxTemps = new ArrayList();
-        private static ArrayList precips = new ArrayList();
-        private static ArrayList humidities = new ArrayList();
-        private static ArrayList windSpeeds = new ArrayList();
-        private static ArrayList newEntry = new ArrayList();
-        private static SqlConnection con = new SqlConnection();
+        private static readonly ArrayList cityNames = new ArrayList();
+        private static readonly ArrayList weatherDates = new ArrayList();
+        private static readonly ArrayList minTemps = new ArrayList();
+        private static readonly ArrayList maxTemps = new ArrayList();
+        private static readonly ArrayList precips = new ArrayList();
+        private static readonly ArrayList humidities = new ArrayList();
+        private static readonly ArrayList windSpeeds = new ArrayList();
+        private static readonly ArrayList newEntry = new ArrayList();
+        private static readonly SqlConnection con = new SqlConnection();
 
         //Getters and Setters
-        public static void addWeatherDate(object value)
+        //City
+        public static void AddCityName(object value)
+        {
+            cityNames.Add(value);
+        }
+
+        public static string GetCityName(int value)
+        {
+            return Convert.ToString(cityNames[value]);
+        }
+
+        public static int GetCityNameCount()
+        {
+            return cityNames.Count;
+        }
+
+        //Weather Date
+        public static void AddWeatherDate(object value)
         {
             newEntry.Add(true);
             weatherDates.Add(value);
         }
 
-        public static DateTime getWeatherDate(int value)
+        public static DateTime GetWeatherDate(int value)
         {
             return Convert.ToDateTime(weatherDates[value]);
         }
 
-        public static void addMinTemp(object value)
+        //Min Temp
+        public static void AddMinTemp(object value)
         {
             minTemps.Add(value);
         }
 
-        public static string getMinTemp(int value)
+        public static string GetMinTemp(int value)
         {
             return Convert.ToString(minTemps[value]);
         }
 
-        public static void addMaxTemp(object value)
+        //Max Temp
+        public static void AddMaxTemp(object value)
         {
             maxTemps.Add(value);
         }
 
-        public static string getMaxTemp(int value)
+        public static string GetMaxTemp(int value)
         {
             return Convert.ToString(maxTemps[value]);
         }
 
-        public static void addPrecipitation(object value)
+        //Precipitation
+        public static void AddPrecipitation(object value)
         {
             precips.Add(value);
         }
 
-        public static string getPrecipitation(int value)
+        public static string GetPrecipitation(int value)
         {
             return Convert.ToString(precips[value]);
         }
 
-        public static void addHumidity(object value)
+        //Humidity
+        public static void AddHumidity(object value)
         {
             humidities.Add(value);
         }
 
-        public static string getHumidity(int value)
+        public static string GetHumidity(int value)
         {
             return Convert.ToString(humidities[value]);
         }
 
-        public static void addWindSpeed(object value)
+        //Wind Speed
+        public static void AddWindSpeed(object value)
         {
             windSpeeds.Add(value);
         }
 
-        public static string getWindSpeed(int value)
+        public static string GetWindSpeed(int value)
         {
             return Convert.ToString(windSpeeds[value]);
         }
 
-        public static void addCityName(object value)
-        {
-            cityNames.Add(value);
-        }
-
-        public static string getCityName(int value)
-        {
-            return Convert.ToString(cityNames[value]);
-        }
-
-        public static int getCityNameCount()
-        {
-            return cityNames.Count;
-        }
-
         //Update Local Arrays with Values from File
-        public static void populateArrayLists()
+        public static void PopulateArrayLists()
         {
             cityNames.Clear();
             weatherDates.Clear();
@@ -153,20 +158,23 @@ namespace POE_19003041_PROG6211
         }
 
         //Update database with new values based on if it was in the database before or not
-        public static void UpdateDatabase()
+        public static void AddToDatabase()
         {
-            SetConnectionString();
-            con.Open();
-            using (con)
+            if (newEntry.Contains(true))
             {
-                for (int i = 0; i < newEntry.Count; i++)
+                SetConnectionString();
+                con.Open();
+                using (con)
                 {
-                    if (Convert.ToBoolean(newEntry[i]) == true)
+                    for (int i = 0; i < newEntry.Count; i++)
                     {
-                        String command = String.Format("INSERT INTO TBL_WEATHER VALUES ('{0}','{1}',{2},{3},{4},{5},{6})", Weather.getCityName(i), Weather.getWeatherDate(i), Weather.getMinTemp(i), Weather.getMaxTemp(i), Weather.getPrecipitation(i), Weather.getHumidity(i), Weather.getWindSpeed(i));
-                        SqlCommand sqlWeather = new SqlCommand(command, con);
-                        sqlWeather.ExecuteNonQuery();
-                        newEntry[i] = false;
+                        if (Convert.ToBoolean(newEntry[i]) == true)
+                        {
+                            String command = String.Format("INSERT INTO TBL_WEATHER VALUES ('{0}','{1}',{2},{3},{4},{5},{6})", Weather.GetCityName(i), Weather.GetWeatherDate(i), Weather.GetMinTemp(i), Weather.GetMaxTemp(i), Weather.GetPrecipitation(i), Weather.GetHumidity(i), Weather.GetWindSpeed(i));
+                            SqlCommand sqlWeather = new SqlCommand(command, con);
+                            sqlWeather.ExecuteNonQuery();
+                            newEntry[i] = false;
+                        }
                     }
                 }
             }

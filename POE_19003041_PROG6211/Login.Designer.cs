@@ -47,7 +47,7 @@
             this.loginQuitButton.TabIndex = 0;
             this.loginQuitButton.Text = "Quit";
             this.loginQuitButton.UseVisualStyleBackColor = true;
-            this.loginQuitButton.Click += new System.EventHandler(this.loginQuitButton_Click);
+            this.loginQuitButton.Click += new System.EventHandler(this.LoginQuitButton_Click);
             // 
             // loginButton
             // 
@@ -57,7 +57,7 @@
             this.loginButton.TabIndex = 1;
             this.loginButton.Text = "Login";
             this.loginButton.UseVisualStyleBackColor = true;
-            this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
+            this.loginButton.Click += new System.EventHandler(this.LoginButton_Click);
             // 
             // loginUsernameBox
             // 
@@ -116,7 +116,7 @@
             this.showHidePasswordButton.Size = new System.Drawing.Size(23, 23);
             this.showHidePasswordButton.TabIndex = 179;
             this.showHidePasswordButton.UseVisualStyleBackColor = false;
-            this.showHidePasswordButton.Click += new System.EventHandler(this.showHidePasswordButton_Click);
+            this.showHidePasswordButton.Click += new System.EventHandler(this.ShowHidePasswordButton_Click);
             // 
             // Login
             // 

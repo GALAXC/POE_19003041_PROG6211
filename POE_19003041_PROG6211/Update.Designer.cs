@@ -85,7 +85,7 @@
             this.editBox.Name = "editBox";
             this.editBox.Size = new System.Drawing.Size(290, 316);
             this.editBox.TabIndex = 143;
-            this.editBox.SelectedIndexChanged += new System.EventHandler(this.editBox_SelectedIndexChanged);
+            this.editBox.SelectedIndexChanged += new System.EventHandler(this.EditBox_SelectedIndexChanged);
             // 
             // label10
             // 
@@ -242,7 +242,7 @@
             this.windBox.Name = "windBox";
             this.windBox.Size = new System.Drawing.Size(39, 20);
             this.windBox.TabIndex = 149;
-            this.windBox.TextChanged += new System.EventHandler(this.windBox_TextChanged);
+            this.windBox.TextChanged += new System.EventHandler(this.WindBox_TextChanged);
             this.windBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WindBox_KeyPress);
             // 
             // humidBox
@@ -253,7 +253,7 @@
             this.humidBox.Name = "humidBox";
             this.humidBox.Size = new System.Drawing.Size(39, 20);
             this.humidBox.TabIndex = 148;
-            this.humidBox.TextChanged += new System.EventHandler(this.humidBox_TextChanged);
+            this.humidBox.TextChanged += new System.EventHandler(this.HumidBox_TextChanged);
             this.humidBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.HumidBox_KeyPress);
             // 
             // precipBox
@@ -275,7 +275,7 @@
             this.maxTempBox.Name = "maxTempBox";
             this.maxTempBox.Size = new System.Drawing.Size(39, 20);
             this.maxTempBox.TabIndex = 146;
-            this.maxTempBox.TextChanged += new System.EventHandler(this.maxTempBox_TextChanged);
+            this.maxTempBox.TextChanged += new System.EventHandler(this.MaxTempBox_TextChanged);
             this.maxTempBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MaxTempBox_KeyPress);
             // 
             // minTempBox
@@ -286,7 +286,7 @@
             this.minTempBox.Name = "minTempBox";
             this.minTempBox.Size = new System.Drawing.Size(39, 20);
             this.minTempBox.TabIndex = 145;
-            this.minTempBox.TextChanged += new System.EventHandler(this.minTempBox_TextChanged);
+            this.minTempBox.TextChanged += new System.EventHandler(this.MinTempBox_TextChanged);
             this.minTempBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MinTempBox_KeyPress);
             // 
             // cityBox
@@ -375,7 +375,7 @@
             this.updateButton.TabIndex = 164;
             this.updateButton.Text = "Update";
             this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            this.updateButton.Click += new System.EventHandler(this.UpdateButton_Click);
             // 
             // contextMenuStrip1
             // 
@@ -408,7 +408,7 @@
             this.exitStrip.Name = "exitStrip";
             this.exitStrip.Size = new System.Drawing.Size(93, 22);
             this.exitStrip.Text = "Exit";
-            this.exitStrip.Click += new System.EventHandler(this.exitStrip_Click);
+            this.exitStrip.Click += new System.EventHandler(this.ExitStrip_Click);
             // 
             // logoutStrip
             // 
@@ -416,7 +416,7 @@
             this.logoutStrip.Name = "logoutStrip";
             this.logoutStrip.Size = new System.Drawing.Size(57, 20);
             this.logoutStrip.Text = "Logout";
-            this.logoutStrip.Click += new System.EventHandler(this.logoutStrip_Click);
+            this.logoutStrip.Click += new System.EventHandler(this.LogoutStrip_Click);
             // 
             // loginStrip
             // 
@@ -448,21 +448,21 @@
             this.reportStrip.Name = "reportStrip";
             this.reportStrip.Size = new System.Drawing.Size(116, 22);
             this.reportStrip.Text = "Report";
-            this.reportStrip.Click += new System.EventHandler(this.reportStrip_Click);
+            this.reportStrip.Click += new System.EventHandler(this.ReportStrip_Click);
             // 
             // captureStrip
             // 
             this.captureStrip.Name = "captureStrip";
             this.captureStrip.Size = new System.Drawing.Size(116, 22);
             this.captureStrip.Text = "Capture";
-            this.captureStrip.Click += new System.EventHandler(this.captureStrip_Click);
+            this.captureStrip.Click += new System.EventHandler(this.CaptureStrip_Click);
             // 
             // usersStrip
             // 
             this.usersStrip.Name = "usersStrip";
             this.usersStrip.Size = new System.Drawing.Size(116, 22);
             this.usersStrip.Text = "Users";
-            this.usersStrip.Click += new System.EventHandler(this.usersStrip_Click);
+            this.usersStrip.Click += new System.EventHandler(this.UsersStrip_Click);
             // 
             // Update
             // 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace POE_19003041_PROG6211
@@ -15,18 +15,20 @@ namespace POE_19003041_PROG6211
         }
 
         public static Boolean firstTimeLoad = true;
-        private ArrayList userCities = new ArrayList(File.ReadAllLines("../../UserCities.txt"));
-        private int userLine;
+        private readonly ArrayList userCities = new ArrayList();
+        private readonly ArrayList users = new ArrayList();
+        private readonly ArrayList editMade = new ArrayList();
+        private readonly ArrayList newUser = new ArrayList();
         private ArrayList citiesSelected = new ArrayList();
-        private string[] userCitiesFile;
+        private static readonly SqlConnection con = new SqlConnection();
 
         //Prepare report screen based on various details
         private void Report_Load(object sender, EventArgs e)
         {
-            populateCityComboBox();
+            PopulateCityComboBox();
             loginStrip.Text = "Logged in as: " + Login.loggedInUser;
-            getUsualCities();
-            updateCityBox();
+            GetUsualCities();
+            UpdateCityBox();
             if (firstTimeLoad == true)
             {
                 label6.Text = "Welcome, " + Login.loggedInUser + ".";
@@ -47,25 +49,25 @@ namespace POE_19003041_PROG6211
         //
 
         //Populate the report city selection combo box
-        private void populateCityComboBox()
+        private void PopulateCityComboBox()
         {
             cityComboBox.Items.Clear();
-            for (int i = 0; i < (Weather.getCityNameCount()); i++)
+            for (int i = 0; i < (Weather.GetCityNameCount()); i++)
             {
-                if (cityComboBox.Items.Contains(Weather.getCityName(i)))
+                if (cityComboBox.Items.Contains(Weather.GetCityName(i)))
                 {
                 }
                 else
                 {
-                    cityComboBox.Items.Add(Weather.getCityName(i));
+                    cityComboBox.Items.Add(Weather.GetCityName(i));
                 }
             }
         }
 
         //Update cities on click
-        private void cityComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void CityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            getUsualCities();
+            GetUsualCities();
             if (citiesSelected.Contains(cityComboBox.SelectedItem))
             {
                 citiesSelected.Remove(cityComboBox.SelectedItem);
@@ -74,56 +76,54 @@ namespace POE_19003041_PROG6211
             {
                 citiesSelected.Add(cityComboBox.SelectedItem);
             }
-            userCities[userLine] = "";
-            for (int i = 0; i < citiesSelected.Count; i++)
-            {
-                if (i == 0)
-                {
-                    userCities[userLine] += Convert.ToString(citiesSelected[0]);
-                }
-                else
-                {
-                    userCities[userLine] += "," + Convert.ToString(citiesSelected[i]);
-                }
-            }
-            userCitiesFile = (string[])userCities.ToArray(typeof(string));
-            File.WriteAllLines("../../UserCities.txt", userCitiesFile);
-            updateCityBox();
+            UpdateCityBox();
         }
 
         //Store cities user selects for next login
-        private void getUsualCities()
+        private void GetUsualCities()
         {
             citiesSelected.Clear();
-            if (userCities.Contains(Login.loggedInUser))
+            String command = String.Format("SELECT * FROM TBL_USERCITIES");
+            SetConnectionString();
+            con.Open();
+            using (con)
             {
-                for (int i = 0; i < userCities.Count; i++)
+                SqlCommand sqlUserCities = new SqlCommand(command, con);
+                SqlDataReader userCitiesSelected = sqlUserCities.ExecuteReader();
+                if (userCitiesSelected.HasRows)
                 {
-                    if (Login.loggedInUser == Convert.ToString(userCities[i]))
+                    while (userCitiesSelected.Read())
                     {
-                        userLine = i + 1;
-                        if (Convert.ToString(userCities[i + 1]) == "None")
-                        {
-                        }
-                        else
-                        {
-                            citiesSelected = new ArrayList(Convert.ToString(userCities[i + 1]).Split(','));
-                            break;
-                        }
+                        users.Add(userCitiesSelected.GetValue(0));
+                        userCities.Add(userCitiesSelected.GetValue(1));
+                        newUser.Add(false);
+                        editMade.Add(false);
                     }
+                }
+            }
+
+            if (users.Contains(Login.loggedInUser))
+            {
+                if (Convert.ToString(userCities[users.IndexOf(Login.loggedInUser)]) == "None")
+                {
+                }
+                else
+                {
+                    citiesSelected = new ArrayList(Convert.ToString(userCities[users.IndexOf(Login.loggedInUser)]).Split(','));
                 }
             }
             else
             {
-                userLine = userCities.Count + 1;
-                userCities.Add(Login.loggedInUser);
+                newUser.Add(true);
+                editMade.Add(false);
+                users.Add(Login.loggedInUser);
                 userCities.Add("Cape Town,Johannesburg");
                 citiesSelected = new ArrayList { "Cape Town", "Johannesburg" };
             }
         }
 
-        //Update selected cities
-        private void updateCityBox()
+        //Update selected cities box
+        private void UpdateCityBox()
         {
             cityReportBox.Clear();
             for (int j = 0; j < citiesSelected.Count; j++)
@@ -143,38 +143,70 @@ namespace POE_19003041_PROG6211
             }
         }
 
+        //Update database with user cities selected
+        public void UpdateUserCityDB()
+        {
+            for (int i = 0; i < newUser.Count; i++)
+            {
+                if (Convert.ToBoolean(newUser[i]) == true)
+                {
+                    String command = String.Format("INSERT INTO TBL_USERCITIES VALUES ('{0}','{1}');", Login.loggedInUser, userCities[i]);
+                    SetConnectionString();
+                    con.Open();
+                    using (con)
+                    {
+                        SqlCommand sqlNewUser = new SqlCommand(command, con);
+                        sqlNewUser.ExecuteNonQuery();
+                        MessageBox.Show("New User Added to User Cities Database!");
+                    }
+                }
+                else
+                {
+                    if (Convert.ToBoolean(editMade[i]) == true)
+                    {
+                        String command2 = String.Format("UPDATE TBL_USERCITIES SET SELECTED = '{0}' WHERE USERNAME = '{1}'", userCities[i], Login.loggedInUser);
+                        SetConnectionString();
+                        con.Open();
+                        using (con)
+                        {
+                            SqlCommand sqlEditMade = new SqlCommand(command2, con);
+                            sqlEditMade.ExecuteNonQuery();
+                            MessageBox.Show("Edit updated in User Cities Database!");
+                        }
+                    }
+                }
+            }
+        }
+
         //Button to clear cities selected
-        private void clearCitiesSelected_Click(object sender, EventArgs e)
+        private void ClearCitiesSelected_Click(object sender, EventArgs e)
         {
             citiesSelected.Clear();
-            userCities[userLine] = "None";
-            userCitiesFile = (string[])userCities.ToArray(typeof(string));
-            File.WriteAllLines("../../UserCities.txt", userCitiesFile);
-            updateCityBox();
+            UpdateCityBox();
             cityReportBox.Text = "None";
         }
 
         //Update start date selected
-        private void startDateBox_ValueChanged(object sender, EventArgs e)
+        private void StartDateBox_ValueChanged(object sender, EventArgs e)
         {
             datesSelected.Text = startDateBox.Value.ToString("yyyy/MM/dd") + " - " + endDateBox.Value.ToString("yyyy/MM/dd");
         }
 
         //Update end date selected
-        private void endDateBox_ValueChanged(object sender, EventArgs e)
+        private void EndDateBox_ValueChanged(object sender, EventArgs e)
         {
             datesSelected.Text = startDateBox.Value.ToString("yyyy/MM/dd") + " - " + endDateBox.Value.ToString("yyyy/MM/dd");
         }
 
-        //Initiate process to retrieve report results
-        private void searchButton_Click(object sender, EventArgs e)
+        //Retrieve report results
+        private void SearchButton_Click(object sender, EventArgs e)
         {
             cityComboBox.Text = "Select City...";
-            populateReportTable();
+            PopulateReportTable();
         }
 
         //Retrieve and compare the results for the weather report
-        private void populateReportTable()
+        private void PopulateReportTable()
         {
             int lowMinTemp = 0;
             int highMinTemp = 0;
@@ -191,81 +223,81 @@ namespace POE_19003041_PROG6211
             {
                 for (int i = 0; i < citiesSelected.Count; i++)
                 {
-                    for (int j = 0; j < Weather.getCityNameCount(); j++)
+                    for (int j = 0; j < Weather.GetCityNameCount(); j++)
                     {
-                        if (Weather.getCityName(j) == Convert.ToString(citiesSelected[i]))
+                        if (Weather.GetCityName(j) == Convert.ToString(citiesSelected[i]))
                         {
-                            if (Weather.getWeatherDate(j) >= startDateBox.Value && Weather.getWeatherDate(j) <= endDateBox.Value)
+                            if (Weather.GetWeatherDate(j) >= startDateBox.Value && Weather.GetWeatherDate(j) <= endDateBox.Value)
                             {
                                 if (reportTable.Rows.Count == 0)
                                 {
                                     //Initiate values in the lowest and highest section
-                                    lowMinTemp = Convert.ToInt32(Weather.getMinTemp(j));
-                                    highMinTemp = Convert.ToInt32(Weather.getMinTemp(j));
-                                    lowMaxTemp = Convert.ToInt32(Weather.getMaxTemp(j));
-                                    highMaxTemp = Convert.ToInt32(Weather.getMaxTemp(j));
-                                    lowPrecip = Convert.ToInt32(Weather.getPrecipitation(j));
-                                    highPrecip = Convert.ToInt32(Weather.getPrecipitation(j));
-                                    lowHumid = Convert.ToInt32(Weather.getHumidity(j));
-                                    highHumid = Convert.ToInt32(Weather.getHumidity(j));
-                                    lowSpeed = Convert.ToInt32(Weather.getWindSpeed(j));
-                                    highSpeed = Convert.ToInt32(Weather.getWindSpeed(j));
+                                    lowMinTemp = Convert.ToInt32(Weather.GetMinTemp(j));
+                                    highMinTemp = Convert.ToInt32(Weather.GetMinTemp(j));
+                                    lowMaxTemp = Convert.ToInt32(Weather.GetMaxTemp(j));
+                                    highMaxTemp = Convert.ToInt32(Weather.GetMaxTemp(j));
+                                    lowPrecip = Convert.ToInt32(Weather.GetPrecipitation(j));
+                                    highPrecip = Convert.ToInt32(Weather.GetPrecipitation(j));
+                                    lowHumid = Convert.ToInt32(Weather.GetHumidity(j));
+                                    highHumid = Convert.ToInt32(Weather.GetHumidity(j));
+                                    lowSpeed = Convert.ToInt32(Weather.GetWindSpeed(j));
+                                    highSpeed = Convert.ToInt32(Weather.GetWindSpeed(j));
                                 }
                                 else
                                 {
                                     //Update values if lowest and highest section not empty
-                                    if (Convert.ToInt32(Weather.getMinTemp(j)) < lowMinTemp)
+                                    if (Convert.ToInt32(Weather.GetMinTemp(j)) < lowMinTemp)
                                     {
-                                        lowMinTemp = Convert.ToInt32(Weather.getMinTemp(j));
+                                        lowMinTemp = Convert.ToInt32(Weather.GetMinTemp(j));
                                     }
 
-                                    if (Convert.ToInt32(Weather.getMinTemp(j)) > highMinTemp)
+                                    if (Convert.ToInt32(Weather.GetMinTemp(j)) > highMinTemp)
                                     {
-                                        highMinTemp = Convert.ToInt32(Weather.getMinTemp(j));
+                                        highMinTemp = Convert.ToInt32(Weather.GetMinTemp(j));
                                     }
 
-                                    if (Convert.ToInt32(Weather.getMaxTemp(j)) < lowMaxTemp)
+                                    if (Convert.ToInt32(Weather.GetMaxTemp(j)) < lowMaxTemp)
                                     {
-                                        lowMaxTemp = Convert.ToInt32(Weather.getMaxTemp(j));
+                                        lowMaxTemp = Convert.ToInt32(Weather.GetMaxTemp(j));
                                     }
 
-                                    if (Convert.ToInt32(Weather.getMaxTemp(j)) > highMaxTemp)
+                                    if (Convert.ToInt32(Weather.GetMaxTemp(j)) > highMaxTemp)
                                     {
-                                        highMaxTemp = Convert.ToInt32(Weather.getMaxTemp(j));
+                                        highMaxTemp = Convert.ToInt32(Weather.GetMaxTemp(j));
                                     }
 
-                                    if (Convert.ToInt32(Weather.getPrecipitation(j)) < lowPrecip)
+                                    if (Convert.ToInt32(Weather.GetPrecipitation(j)) < lowPrecip)
                                     {
-                                        lowPrecip = Convert.ToInt32(Weather.getPrecipitation(j));
+                                        lowPrecip = Convert.ToInt32(Weather.GetPrecipitation(j));
                                     }
 
-                                    if (Convert.ToInt32(Weather.getPrecipitation(j)) > highPrecip)
+                                    if (Convert.ToInt32(Weather.GetPrecipitation(j)) > highPrecip)
                                     {
-                                        highPrecip = Convert.ToInt32(Weather.getPrecipitation(j));
+                                        highPrecip = Convert.ToInt32(Weather.GetPrecipitation(j));
                                     }
 
-                                    if (Convert.ToInt32(Weather.getHumidity(j)) < lowHumid)
+                                    if (Convert.ToInt32(Weather.GetHumidity(j)) < lowHumid)
                                     {
-                                        lowHumid = Convert.ToInt32(Weather.getHumidity(j));
+                                        lowHumid = Convert.ToInt32(Weather.GetHumidity(j));
                                     }
 
-                                    if (Convert.ToInt32(Weather.getHumidity(j)) > highHumid)
+                                    if (Convert.ToInt32(Weather.GetHumidity(j)) > highHumid)
                                     {
-                                        highHumid = Convert.ToInt32(Weather.getHumidity(j));
+                                        highHumid = Convert.ToInt32(Weather.GetHumidity(j));
                                     }
 
-                                    if (Convert.ToInt32(Weather.getWindSpeed(j)) < lowSpeed)
+                                    if (Convert.ToInt32(Weather.GetWindSpeed(j)) < lowSpeed)
                                     {
-                                        lowSpeed = Convert.ToInt32(Weather.getWindSpeed(j));
+                                        lowSpeed = Convert.ToInt32(Weather.GetWindSpeed(j));
                                     }
 
-                                    if (Convert.ToInt32(Weather.getWindSpeed(j)) > highSpeed)
+                                    if (Convert.ToInt32(Weather.GetWindSpeed(j)) > highSpeed)
                                     {
-                                        highSpeed = Convert.ToInt32(Weather.getWindSpeed(j));
+                                        highSpeed = Convert.ToInt32(Weather.GetWindSpeed(j));
                                     }
                                 }
                                 //Populate the table with the report
-                                reportTable.Rows.Add(Weather.getCityName(j), Weather.getWeatherDate(j).ToShortDateString(), Weather.getMinTemp(j) + "°C", Weather.getMaxTemp(j) + "°C", Weather.getPrecipitation(j) + "%", Weather.getHumidity(j) + "%", Weather.getWindSpeed(j) + "km/h");
+                                reportTable.Rows.Add(Weather.GetCityName(j), Weather.GetWeatherDate(j).ToShortDateString(), Weather.GetMinTemp(j) + "°C", Weather.GetMaxTemp(j) + "°C", Weather.GetPrecipitation(j) + "%", Weather.GetHumidity(j) + "%", Weather.GetWindSpeed(j) + "km/h");
 
                                 lowestMinTemp.Text = Convert.ToString(lowMinTemp) + " °C";
                                 highestMinTemp.Text = Convert.ToString(highMinTemp) + " °C";
@@ -308,9 +340,9 @@ namespace POE_19003041_PROG6211
         }
 
         //Create and Format printable REPORT based on results requested by admin
-        private void printReportButton_Click(object sender, EventArgs e)
+        private void PrintReportButton_Click(object sender, EventArgs e)
         {
-            searchButton_Click(sender, e);
+            SearchButton_Click(sender, e);
             if (reportTable.Rows.Count > 0)
             {
                 using (StreamWriter rsw = new StreamWriter("../../PrintableReport.txt"))
@@ -358,13 +390,13 @@ namespace POE_19003041_PROG6211
                     rsw.WriteLine();
                     for (int i = 0; i < reportTable.Rows.Count; i++)
                     {
-                        rsw.Write(string.Format("{0,-18}", $"{reportTable.Rows[i].Cells[0].Value.ToString()}"));
-                        rsw.Write(string.Format("{0,-13:d}", $"{reportTable.Rows[i].Cells[1].Value.ToString()}"));
-                        rsw.Write(string.Format("{0,-10}", $"{reportTable.Rows[i].Cells[2].Value.ToString()}"));
-                        rsw.Write(string.Format("{0,-10}", $"{reportTable.Rows[i].Cells[3].Value.ToString()}"));
-                        rsw.Write(string.Format("{0,-15}", $"{reportTable.Rows[i].Cells[4].Value.ToString()}"));
-                        rsw.Write(string.Format("{0,-10}", $"{reportTable.Rows[i].Cells[5].Value.ToString()}"));
-                        rsw.Write(string.Format("{0,-12}", $"{reportTable.Rows[i].Cells[6].Value.ToString()}"));
+                        rsw.Write(string.Format("{0,-18}", $"{reportTable.Rows[i].Cells[0].Value}"));
+                        rsw.Write(string.Format("{0,-13:d}", $"{reportTable.Rows[i].Cells[1].Value}"));
+                        rsw.Write(string.Format("{0,-10}", $"{reportTable.Rows[i].Cells[2].Value}"));
+                        rsw.Write(string.Format("{0,-10}", $"{reportTable.Rows[i].Cells[3].Value}"));
+                        rsw.Write(string.Format("{0,-15}", $"{reportTable.Rows[i].Cells[4].Value}"));
+                        rsw.Write(string.Format("{0,-10}", $"{reportTable.Rows[i].Cells[5].Value}"));
+                        rsw.Write(string.Format("{0,-12}", $"{reportTable.Rows[i].Cells[6].Value}"));
                         rsw.WriteLine();
                     }
                 }
@@ -383,13 +415,21 @@ namespace POE_19003041_PROG6211
             }
         }
 
+        //Setting up database connection
+        private static void SetConnectionString()
+        {
+            String path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "../../../POE_19003041_PROG6211_WEB/App_Data");
+            AppDomain.CurrentDomain.SetData("DataDirectory", path);
+            con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\POE_Database.mdf;Integrated Security=True";
+        }
+
         //Tool strip menus
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LogoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             firstTimeLoad = true;
             this.Hide();
@@ -398,7 +438,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void captureStrip_Click(object sender, EventArgs e)
+        private void CaptureStrip_Click(object sender, EventArgs e)
         {
             this.Hide();
             Capture newCapture = new Capture();
@@ -406,7 +446,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void updateStrip_Click(object sender, EventArgs e)
+        private void UpdateStrip_Click(object sender, EventArgs e)
         {
             this.Hide();
             Update newUpdate = new Update();
@@ -414,7 +454,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void usersStrip_Click(object sender, EventArgs e)
+        private void UsersStrip_Click(object sender, EventArgs e)
         {
             this.Hide();
             Users newUsers = new Users();

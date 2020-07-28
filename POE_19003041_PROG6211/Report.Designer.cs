@@ -96,7 +96,7 @@
             this.clearCitiesSelected.TabIndex = 166;
             this.clearCitiesSelected.Text = "Clear";
             this.clearCitiesSelected.UseVisualStyleBackColor = true;
-            this.clearCitiesSelected.Click += new System.EventHandler(this.clearCitiesSelected_Click);
+            this.clearCitiesSelected.Click += new System.EventHandler(this.ClearCitiesSelected_Click);
             // 
             // lowestMaxTemp
             // 
@@ -353,7 +353,7 @@
             this.searchButton.TabIndex = 142;
             this.searchButton.Text = "Search";
             this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            this.searchButton.Click += new System.EventHandler(this.SearchButton_Click);
             // 
             // reportTable
             // 
@@ -498,7 +498,7 @@
             this.endDateBox.Size = new System.Drawing.Size(211, 20);
             this.endDateBox.TabIndex = 136;
             this.endDateBox.Value = new System.DateTime(2020, 9, 30, 0, 0, 0, 0);
-            this.endDateBox.ValueChanged += new System.EventHandler(this.endDateBox_ValueChanged);
+            this.endDateBox.ValueChanged += new System.EventHandler(this.EndDateBox_ValueChanged);
             // 
             // label2
             // 
@@ -520,7 +520,7 @@
             this.startDateBox.Size = new System.Drawing.Size(211, 20);
             this.startDateBox.TabIndex = 134;
             this.startDateBox.Value = new System.DateTime(2020, 1, 1, 0, 0, 0, 0);
-            this.startDateBox.ValueChanged += new System.EventHandler(this.startDateBox_ValueChanged);
+            this.startDateBox.ValueChanged += new System.EventHandler(this.StartDateBox_ValueChanged);
             // 
             // label1
             // 
@@ -557,7 +557,7 @@
             this.cityComboBox.Name = "cityComboBox";
             this.cityComboBox.Size = new System.Drawing.Size(211, 21);
             this.cityComboBox.TabIndex = 131;
-            this.cityComboBox.SelectedIndexChanged += new System.EventHandler(this.cityComboBox_SelectedIndexChanged);
+            this.cityComboBox.SelectedIndexChanged += new System.EventHandler(this.CityComboBox_SelectedIndexChanged);
             // 
             // menuStrip1
             // 
@@ -585,7 +585,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
             this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
@@ -593,7 +593,7 @@
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
             this.logoutToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.logoutToolStripMenuItem.Text = "Logout";
-            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
+            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.LogoutToolStripMenuItem_Click);
             // 
             // loginStrip
             // 
@@ -619,7 +619,7 @@
             this.printReportButton.TabIndex = 168;
             this.printReportButton.Text = "Print Report";
             this.printReportButton.UseVisualStyleBackColor = true;
-            this.printReportButton.Click += new System.EventHandler(this.printReportButton_Click);
+            this.printReportButton.Click += new System.EventHandler(this.PrintReportButton_Click);
             // 
             // viewStrip
             // 
@@ -636,21 +636,21 @@
             this.captureStrip.Name = "captureStrip";
             this.captureStrip.Size = new System.Drawing.Size(180, 22);
             this.captureStrip.Text = "Capture";
-            this.captureStrip.Click += new System.EventHandler(this.captureStrip_Click);
+            this.captureStrip.Click += new System.EventHandler(this.CaptureStrip_Click);
             // 
             // updateStrip
             // 
             this.updateStrip.Name = "updateStrip";
             this.updateStrip.Size = new System.Drawing.Size(180, 22);
             this.updateStrip.Text = "Update";
-            this.updateStrip.Click += new System.EventHandler(this.updateStrip_Click);
+            this.updateStrip.Click += new System.EventHandler(this.UpdateStrip_Click);
             // 
             // usersStrip
             // 
             this.usersStrip.Name = "usersStrip";
             this.usersStrip.Size = new System.Drawing.Size(180, 22);
             this.usersStrip.Text = "Users";
-            this.usersStrip.Click += new System.EventHandler(this.usersStrip_Click);
+            this.usersStrip.Click += new System.EventHandler(this.UsersStrip_Click);
             // 
             // Report
             // 

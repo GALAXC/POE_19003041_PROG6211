@@ -81,7 +81,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
             this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // viewStrip
             // 
@@ -98,21 +98,21 @@
             this.reportStrip.Name = "reportStrip";
             this.reportStrip.Size = new System.Drawing.Size(116, 22);
             this.reportStrip.Text = "Report";
-            this.reportStrip.Click += new System.EventHandler(this.reportStrip_Click);
+            this.reportStrip.Click += new System.EventHandler(this.ReportStrip_Click);
             // 
             // captureStrip
             // 
             this.captureStrip.Name = "captureStrip";
             this.captureStrip.Size = new System.Drawing.Size(116, 22);
             this.captureStrip.Text = "Capture";
-            this.captureStrip.Click += new System.EventHandler(this.captureStrip_Click);
+            this.captureStrip.Click += new System.EventHandler(this.CaptureStrip_Click);
             // 
             // updateStrip
             // 
             this.updateStrip.Name = "updateStrip";
             this.updateStrip.Size = new System.Drawing.Size(116, 22);
             this.updateStrip.Text = "Update";
-            this.updateStrip.Click += new System.EventHandler(this.updateStrip_Click);
+            this.updateStrip.Click += new System.EventHandler(this.UpdateStrip_Click);
             // 
             // logoutToolStripMenuItem
             // 
@@ -120,7 +120,7 @@
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
             this.logoutToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.logoutToolStripMenuItem.Text = "Logout";
-            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
+            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.LogoutToolStripMenuItem_Click);
             // 
             // loginStrip
             // 
@@ -153,7 +153,7 @@
             this.userBox.Name = "userBox";
             this.userBox.Size = new System.Drawing.Size(197, 186);
             this.userBox.TabIndex = 165;
-            this.userBox.SelectedIndexChanged += new System.EventHandler(this.userBox_SelectedIndexChanged);
+            this.userBox.SelectedIndexChanged += new System.EventHandler(this.UserBox_SelectedIndexChanged);
             // 
             // usersLabel
             // 
@@ -239,7 +239,7 @@
             this.updateButton.TabIndex = 174;
             this.updateButton.Text = "Update";
             this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            this.updateButton.Click += new System.EventHandler(this.UpdateButton_Click);
             // 
             // deleteButton
             // 
@@ -249,7 +249,7 @@
             this.deleteButton.TabIndex = 175;
             this.deleteButton.Text = "Delete";
             this.deleteButton.UseVisualStyleBackColor = true;
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // showHidePasswordButton
             // 
@@ -261,7 +261,7 @@
             this.showHidePasswordButton.Size = new System.Drawing.Size(23, 23);
             this.showHidePasswordButton.TabIndex = 177;
             this.showHidePasswordButton.UseVisualStyleBackColor = false;
-            this.showHidePasswordButton.Click += new System.EventHandler(this.showHidePasswordButton_Click);
+            this.showHidePasswordButton.Click += new System.EventHandler(this.ShowHidePasswordButton_Click);
             // 
             // addButton
             // 
@@ -274,7 +274,7 @@
             this.addButton.TabIndex = 176;
             this.addButton.Text = "Add";
             this.addButton.UseVisualStyleBackColor = false;
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
             // Users
             // 

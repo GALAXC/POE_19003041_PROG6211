@@ -143,7 +143,7 @@
             this.minTempBox.Size = new System.Drawing.Size(39, 20);
             this.minTempBox.TabIndex = 2;
             this.minTempBox.Text = "56";
-            this.minTempBox.TextChanged += new System.EventHandler(this.minTempBox_TextChanged);
+            this.minTempBox.TextChanged += new System.EventHandler(this.MinTempBox_TextChanged);
             this.minTempBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MinTempBox_KeyPress);
             // 
             // maxTempBox
@@ -155,7 +155,7 @@
             this.maxTempBox.Size = new System.Drawing.Size(39, 20);
             this.maxTempBox.TabIndex = 3;
             this.maxTempBox.Text = "56";
-            this.maxTempBox.TextChanged += new System.EventHandler(this.maxTempBox_TextChanged);
+            this.maxTempBox.TextChanged += new System.EventHandler(this.MaxTempBox_TextChanged);
             this.maxTempBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MaxTempBox_KeyPress);
             // 
             // precipBox
@@ -179,7 +179,7 @@
             this.humidBox.Size = new System.Drawing.Size(39, 20);
             this.humidBox.TabIndex = 5;
             this.humidBox.Text = "56";
-            this.humidBox.TextChanged += new System.EventHandler(this.humidBox_TextChanged);
+            this.humidBox.TextChanged += new System.EventHandler(this.HumidBox_TextChanged);
             this.humidBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.HumidBox_KeyPress);
             // 
             // windBox
@@ -191,7 +191,7 @@
             this.windBox.Size = new System.Drawing.Size(39, 20);
             this.windBox.TabIndex = 6;
             this.windBox.Text = "56";
-            this.windBox.TextChanged += new System.EventHandler(this.windBox_TextChanged);
+            this.windBox.TextChanged += new System.EventHandler(this.WindBox_TextChanged);
             this.windBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WindBox_KeyPress);
             // 
             // cityLabel
@@ -287,7 +287,7 @@
             this.submitButton.TabIndex = 14;
             this.submitButton.Text = "Submit";
             this.submitButton.UseVisualStyleBackColor = true;
-            this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
+            this.submitButton.Click += new System.EventHandler(this.SubmitButton_Click);
             // 
             // dateInputBox
             // 
@@ -401,7 +401,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
             this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
@@ -409,7 +409,7 @@
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
             this.logoutToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.logoutToolStripMenuItem.Text = "Logout";
-            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
+            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.LogoutToolStripMenuItem_Click);
             // 
             // loginStrip
             // 
@@ -441,21 +441,21 @@
             this.reportStrip.Name = "reportStrip";
             this.reportStrip.Size = new System.Drawing.Size(180, 22);
             this.reportStrip.Text = "Report";
-            this.reportStrip.Click += new System.EventHandler(this.reportStrip_Click);
+            this.reportStrip.Click += new System.EventHandler(this.ReportStrip_Click);
             // 
             // updateStrip
             // 
             this.updateStrip.Name = "updateStrip";
             this.updateStrip.Size = new System.Drawing.Size(180, 22);
             this.updateStrip.Text = "Update";
-            this.updateStrip.Click += new System.EventHandler(this.updateStrip_Click);
+            this.updateStrip.Click += new System.EventHandler(this.UpdateStrip_Click);
             // 
             // usersStrip
             // 
             this.usersStrip.Name = "usersStrip";
             this.usersStrip.Size = new System.Drawing.Size(180, 22);
             this.usersStrip.Text = "Users";
-            this.usersStrip.Click += new System.EventHandler(this.usersStrip_Click);
+            this.usersStrip.Click += new System.EventHandler(this.UsersStrip_Click);
             // 
             // Capture
             // 

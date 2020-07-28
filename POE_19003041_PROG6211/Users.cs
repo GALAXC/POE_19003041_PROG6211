@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace POE_19003041_PROG6211
 {
@@ -28,12 +21,12 @@ namespace POE_19003041_PROG6211
         {
             usersLabel.Location = new System.Drawing.Point((this.Size.Width / 2) - (usersLabel.Size.Width / 2), 39);
             loginStrip.Text = "Logged in as: " + Login.loggedInUser;
-            updateUsersBox();
+            UpdateUsersBox();
             userBox.SelectedIndex = 0;
         }
 
         //Repopulate Users Box
-        private void updateUsersBox()
+        private void UpdateUsersBox()
         {
             userBox.Items.Clear();
             user = System.IO.File.ReadAllLines("../../LoginDetails.txt");
@@ -45,7 +38,7 @@ namespace POE_19003041_PROG6211
         }
 
         //Update information on click
-        private void userBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void UserBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             usernameBox.Text = user[userBox.SelectedIndex * 3];
             passwordBox.Text = user[userBox.SelectedIndex * 3 + 1];
@@ -58,11 +51,11 @@ namespace POE_19003041_PROG6211
                 userTypeBox.SelectedItem = "Regular";
             }
             passwordButtonStatus = false;
-            showHidePasswordButton_Click(sender, e);
+            ShowHidePasswordButton_Click(sender, e);
         }
 
         //Update button
-        private void updateButton_Click(object sender, EventArgs e)
+        private void UpdateButton_Click(object sender, EventArgs e)
         {
             if (usernameBox.Text != "" && passwordBox.Text != "")
             {
@@ -87,7 +80,7 @@ namespace POE_19003041_PROG6211
                         System.IO.File.WriteAllLines("../../LoginDetails.txt", user);
                         MessageBox.Show("User " + oldName + " successfully updated.");
                         int tempIndex = userBox.SelectedIndex;
-                        updateUsersBox();
+                        UpdateUsersBox();
                         userBox.SelectedIndex = tempIndex;
                     }
                 }
@@ -99,7 +92,7 @@ namespace POE_19003041_PROG6211
         }
 
         //Delete button
-        private void deleteButton_Click(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("This will delete the currently selected user.\n\nAre you sure?", "Delete User?", MessageBoxButtons.YesNo);
             DialogResult resultSame;
@@ -128,11 +121,11 @@ namespace POE_19003041_PROG6211
                         user = (string[])newUser.ToArray(typeof(string));
                         File.WriteAllLines("../../LoginDetails.txt", user);
                         int tempIndex = userBox.SelectedIndex;
-                        updateUsersBox();
+                        UpdateUsersBox();
                         userBox.SelectedIndex = tempIndex - 1;
                         if (logout == true)
                         {
-                            logoutToolStripMenuItem_Click(sender, e);
+                            LogoutToolStripMenuItem_Click(sender, e);
                         }
                     }
                 }
@@ -140,7 +133,7 @@ namespace POE_19003041_PROG6211
         }
 
         //Add (Plus) Button
-        private void addButton_Click(object sender, EventArgs e)
+        private void AddButton_Click(object sender, EventArgs e)
         {
             if (usernameBox.Text != "" && passwordBox.Text != "")
             {
@@ -163,7 +156,7 @@ namespace POE_19003041_PROG6211
                         }
                         user = (string[])newUser.ToArray(typeof(string));
                         System.IO.File.WriteAllLines("../../LoginDetails.txt", user);
-                        updateUsersBox();
+                        UpdateUsersBox();
                         MessageBox.Show("User " + usernameBox.Text + " successfully added.");
                         userBox.SelectedIndex = (newUser.Count / 3) - 1;
                     }
@@ -176,7 +169,7 @@ namespace POE_19003041_PROG6211
         }
 
         //Show/Hide Password Button
-        private void showHidePasswordButton_Click(object sender, EventArgs e)
+        private void ShowHidePasswordButton_Click(object sender, EventArgs e)
         {
             //Password button status = True if the password is hidden
             if (passwordButtonStatus == true)
@@ -199,12 +192,12 @@ namespace POE_19003041_PROG6211
         }
 
         //Tool strip menus
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LogoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Report.firstTimeLoad = true;
             this.Hide();
@@ -213,7 +206,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void captureStrip_Click(object sender, EventArgs e)
+        private void CaptureStrip_Click(object sender, EventArgs e)
         {
             this.Hide();
             Capture newCapture = new Capture();
@@ -221,7 +214,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void reportStrip_Click(object sender, EventArgs e)
+        private void ReportStrip_Click(object sender, EventArgs e)
         {
             this.Hide();
             Report reportForm = new Report();
@@ -229,7 +222,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void updateStrip_Click(object sender, EventArgs e)
+        private void UpdateStrip_Click(object sender, EventArgs e)
         {
             this.Hide();
             Update newUpdate = new Update();

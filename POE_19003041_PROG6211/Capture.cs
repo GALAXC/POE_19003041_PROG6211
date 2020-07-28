@@ -22,26 +22,27 @@ namespace POE_19003041_PROG6211
         //
         //Capture section Code
         //
-        private void submitButton_Click(object sender, EventArgs e)
+        private void SubmitButton_Click(object sender, EventArgs e)
         {
-            checkValues();
+            CheckValues();
             if (valuesGood == true && cityBox.Text != "")
             {
                 //Add values to relevant arrays if data is input correctly
                 if (cityBox.Items.Contains(cityBox.Text))
                 {
-                    Weather.addCityName(cityBox.Items[cityBox.Items.IndexOf(cityBox.Text)]);
+                    Weather.AddCityName(cityBox.Items[cityBox.Items.IndexOf(cityBox.Text)]);
                 }
                 else
                 {
-                    Weather.addCityName(cityBox.Text);
+                    Weather.AddCityName(cityBox.Text);
                 }
-                Weather.addWeatherDate(dateInputBox.Value);
-                Weather.addMinTemp(minTempBox.Text);
-                Weather.addMaxTemp(maxTempBox.Text);
-                Weather.addPrecipitation(precipBox.Text);
-                Weather.addHumidity(humidBox.Text);
-                Weather.addWindSpeed(windBox.Text);
+                Weather.AddWeatherDate(dateInputBox.Value);
+                Weather.AddMinTemp(minTempBox.Text);
+                Weather.AddMaxTemp(maxTempBox.Text);
+                Weather.AddPrecipitation(precipBox.Text);
+                Weather.AddHumidity(humidBox.Text);
+                Weather.AddWindSpeed(windBox.Text);
+                Weather.AddToDatabase();
                 MessageBox.Show("Data Captured Successfully.");
             }
             else
@@ -51,15 +52,15 @@ namespace POE_19003041_PROG6211
         }
 
         //Check if any incorrect values have been copy pasted into capture boxes
-        private void checkValues()
+        private void CheckValues()
         {
             valuesGood = true;
-            valueCheckText(cityBox.Text, 0);
-            valueCheck(minTempBox.Text, 0);
-            valueCheck(maxTempBox.Text, 0);
-            valueCheck(precipBox.Text, 0);
-            valueCheck(humidBox.Text, 0);
-            valueCheck(windBox.Text, 0);
+            ValueCheckText(cityBox.Text);
+            ValueCheck(minTempBox.Text);
+            ValueCheck(maxTempBox.Text);
+            ValueCheck(precipBox.Text);
+            ValueCheck(humidBox.Text);
+            ValueCheck(windBox.Text);
         }
 
         //Clear the values from the capture section
@@ -74,9 +75,9 @@ namespace POE_19003041_PROG6211
         }
 
         //Check numeric values are entered correctly
-        private void valueCheck(string tempVar1, int tempOut1)
+        private void ValueCheck(string tempVar1)
         {
-            if ((int.TryParse(tempVar1, out tempOut1)) && valuesGood == true)
+            if ((int.TryParse(tempVar1, out _)) && valuesGood == true)
             {
             }
             else
@@ -86,9 +87,9 @@ namespace POE_19003041_PROG6211
         }
 
         //Check text values are entered correctly
-        private void valueCheckText(string tempVar1, int tempOut1)
+        private void ValueCheckText(string tempVar1)
         {
-            if ((int.TryParse(tempVar1, out tempOut1)) && valuesGood == true)
+            if ((int.TryParse(tempVar1, out _)) && valuesGood == true)
             {
                 valuesGood = false;
             }
@@ -128,7 +129,7 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        private void minTempBox_TextChanged(object sender, EventArgs e)
+        private void MinTempBox_TextChanged(object sender, EventArgs e)
         {
             if (minTempBox.Text == "")
             {
@@ -158,7 +159,7 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        private void maxTempBox_TextChanged(object sender, EventArgs e)
+        private void MaxTempBox_TextChanged(object sender, EventArgs e)
         {
             if (maxTempBox.Text == "")
             {
@@ -187,8 +188,7 @@ namespace POE_19003041_PROG6211
             {
                 precipBox.Text = "0";
             }
-            int successInt;
-            if (int.TryParse(precipBox.Text, out successInt))
+            if (int.TryParse(precipBox.Text, out int successInt))
             {
                 if (successInt > 100)
                 {
@@ -207,14 +207,13 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        private void humidBox_TextChanged(object sender, EventArgs e)
+        private void HumidBox_TextChanged(object sender, EventArgs e)
         {
             if (humidBox.Text == "")
             {
                 humidBox.Text = "0";
             }
-            int successInt;
-            if (int.TryParse(humidBox.Text, out successInt))
+            if (int.TryParse(humidBox.Text, out int successInt))
             {
                 if (successInt > 100)
                 {
@@ -233,7 +232,7 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        private void windBox_TextChanged(object sender, EventArgs e)
+        private void WindBox_TextChanged(object sender, EventArgs e)
         {
             if (windBox.Text == "")
             {
@@ -248,15 +247,15 @@ namespace POE_19003041_PROG6211
         //
         //Menu Strip Items
         //
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Weather.UpdateDatabase();
+            Weather.AddToDatabase();
             this.Close();
         }
 
-        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LogoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Weather.UpdateDatabase();
+            Weather.AddToDatabase();
             Report.firstTimeLoad = true;
             this.Hide();
             Login newLogin = new Login();
@@ -264,27 +263,27 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        private void reportStrip_Click(object sender, EventArgs e)
+        private void ReportStrip_Click(object sender, EventArgs e)
         {
-            Weather.UpdateDatabase();
+            Weather.AddToDatabase();
             this.Hide();
             Report reportForm = new Report();
             reportForm.ShowDialog();
             this.Close();
         }
 
-        private void updateStrip_Click(object sender, EventArgs e)
+        private void UpdateStrip_Click(object sender, EventArgs e)
         {
-            Weather.UpdateDatabase();
+            Weather.AddToDatabase();
             this.Hide();
             Update newUpdate = new Update();
             newUpdate.ShowDialog();
             this.Close();
         }
 
-        private void usersStrip_Click(object sender, EventArgs e)
+        private void UsersStrip_Click(object sender, EventArgs e)
         {
-            Weather.UpdateDatabase();
+            Weather.AddToDatabase();
             this.Hide();
             Users newUsers = new Users();
             newUsers.ShowDialog();

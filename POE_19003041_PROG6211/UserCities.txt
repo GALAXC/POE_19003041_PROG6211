@@ -1,5 +1,5 @@
 Taine
-Cape Town,Durban,Boksburg,East London,Johannesburg,Kempton Park,Newcastle,KwaMashu,Ntuzuma,Port Elizabeth
+,Roodepoort,Umlazi
 John
 Cape Town,Johannesburg,Durban
 Jimmy

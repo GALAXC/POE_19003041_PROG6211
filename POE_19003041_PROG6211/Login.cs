@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-using System.Data.SqlClient;
 using System.Collections;
+using System.Data.SqlClient;
+using System.Windows.Forms;
 
 namespace POE_19003041_PROG6211
 {
@@ -17,7 +15,7 @@ namespace POE_19003041_PROG6211
         public static String loggedInUser = "";
         public static Boolean isUserAdmin = false;
         private Boolean passwordButtonStatus = true;
-        private static SqlConnection con = new SqlConnection();
+        private static readonly SqlConnection con = new SqlConnection();
         private ArrayList usernameList;
         private ArrayList passwordList;
         private ArrayList userType;
@@ -53,13 +51,13 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        private void loginQuitButton_Click(object sender, EventArgs e)
+        private void LoginQuitButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
         //Read LoginDetails.txt file and compare it against user entered login details
-        private void loginButton_Click(object sender, EventArgs e)
+        private void LoginButton_Click(object sender, EventArgs e)
         {
             if (loginUsernameBox.Text != "" && loginPasswordBox.Text != "")
             {
@@ -98,7 +96,7 @@ namespace POE_19003041_PROG6211
         }
 
         //Show/Hide the password
-        private void showHidePasswordButton_Click(object sender, EventArgs e)
+        private void ShowHidePasswordButton_Click(object sender, EventArgs e)
         {
             //Password button status = True if the password is hidden
             if (passwordButtonStatus == true)
