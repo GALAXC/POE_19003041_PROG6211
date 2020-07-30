@@ -31,21 +31,14 @@ namespace POE_19003041_PROG6211
         //Compare password and allow/disallow access
         private void OkButton_Click(object sender, EventArgs e)
         {
-            string[] login = System.IO.File.ReadAllLines("../../LoginDetails.txt");
-            for (int i = 0; i < login.Length; i++)
+            if (Weather.GetPassword(Weather.GetIndexOfUsername(Login.loggedInUser)) == passwordBox.Text)
             {
-                if (Login.loggedInUser == login[i])
-                {
-                    if (login[i + 1] == passwordBox.Text)
-                    {
-                        allowUser = true;
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("The password you have entered is incorrect.");
-                    }
-                }
+                allowUser = true;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("The password you have entered is incorrect.");
             }
         }
 

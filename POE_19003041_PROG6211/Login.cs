@@ -56,7 +56,7 @@ namespace POE_19003041_PROG6211
             this.Close();
         }
 
-        //Read LoginDetails.txt file and compare it against user entered login details
+        //Read login database data and compare it against user entered login details
         private void LoginButton_Click(object sender, EventArgs e)
         {
             if (loginUsernameBox.Text != "" && loginPasswordBox.Text != "")

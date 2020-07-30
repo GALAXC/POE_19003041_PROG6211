@@ -27,13 +27,14 @@ namespace POE_19003041_PROG6211
         {
             PopulateCityComboBox();
             loginStrip.Text = "Logged in as: " + Login.loggedInUser;
-            GetUsualCities();
             UpdateCityBox();
             if (firstTimeLoad == true)
             {
                 label6.Text = "Welcome, " + Login.loggedInUser + ".";
                 label6.Location = new System.Drawing.Point((557 - (label6.Size.Width / 2)), 37);
                 firstTimeLoad = false;
+                GetUsualCities();
+                UpdateCityBox();
             }
             if (Login.isUserAdmin == false)
             {
@@ -67,7 +68,7 @@ namespace POE_19003041_PROG6211
         //Update cities on click
         private void CityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            GetUsualCities();
+            editMade[users.IndexOf(Login.loggedInUser)] = true;
             if (citiesSelected.Contains(cityComboBox.SelectedItem))
             {
                 citiesSelected.Remove(cityComboBox.SelectedItem);
@@ -76,13 +77,38 @@ namespace POE_19003041_PROG6211
             {
                 citiesSelected.Add(cityComboBox.SelectedItem);
             }
+            UpdateDBArrayLists();
             UpdateCityBox();
+        }
+
+        //Update local variables with city selection changes
+        private void UpdateDBArrayLists()
+        {
+            userCities[users.IndexOf(Login.loggedInUser)] = "";
+            if (citiesSelected.Count != 0)
+            {
+                for (int i = 0; i < citiesSelected.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        userCities[users.IndexOf(Login.loggedInUser)] = citiesSelected[0];
+                    }
+                    else
+                    {
+                        userCities[users.IndexOf(Login.loggedInUser)] += "," + citiesSelected[i];
+                    }
+                }
+            }
         }
 
         //Store cities user selects for next login
         private void GetUsualCities()
         {
             citiesSelected.Clear();
+            users.Clear();
+            userCities.Clear();
+            newUser.Clear();
+            editMade.Clear();
             String command = String.Format("SELECT * FROM TBL_USERCITIES");
             SetConnectionString();
             con.Open();
@@ -104,7 +130,7 @@ namespace POE_19003041_PROG6211
 
             if (users.Contains(Login.loggedInUser))
             {
-                if (Convert.ToString(userCities[users.IndexOf(Login.loggedInUser)]) == "None")
+                if (Convert.ToString(userCities[users.IndexOf(Login.loggedInUser)]) == "")
                 {
                 }
                 else
@@ -182,7 +208,8 @@ namespace POE_19003041_PROG6211
         private void ClearCitiesSelected_Click(object sender, EventArgs e)
         {
             citiesSelected.Clear();
-            UpdateCityBox();
+            UpdateDBArrayLists();
+            editMade[users.IndexOf(Login.loggedInUser)] = true;
             cityReportBox.Text = "None";
         }
 
@@ -426,11 +453,13 @@ namespace POE_19003041_PROG6211
         //Tool strip menus
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            UpdateUserCityDB();
             this.Close();
         }
 
         private void LogoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            UpdateUserCityDB();
             firstTimeLoad = true;
             this.Hide();
             Login newLogin = new Login();
@@ -440,6 +469,7 @@ namespace POE_19003041_PROG6211
 
         private void CaptureStrip_Click(object sender, EventArgs e)
         {
+            UpdateUserCityDB();
             this.Hide();
             Capture newCapture = new Capture();
             newCapture.ShowDialog();
@@ -448,6 +478,7 @@ namespace POE_19003041_PROG6211
 
         private void UpdateStrip_Click(object sender, EventArgs e)
         {
+            UpdateUserCityDB();
             this.Hide();
             Update newUpdate = new Update();
             newUpdate.ShowDialog();
@@ -456,6 +487,7 @@ namespace POE_19003041_PROG6211
 
         private void UsersStrip_Click(object sender, EventArgs e)
         {
+            UpdateUserCityDB();
             this.Hide();
             Users newUsers = new Users();
             newUsers.ShowDialog();

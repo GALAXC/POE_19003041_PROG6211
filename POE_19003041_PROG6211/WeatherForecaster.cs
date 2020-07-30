@@ -20,13 +20,14 @@ namespace POE_19003041_PROG6211
         //Check files needed (Weather and Login Data) are available and runs the program if they are
         private static void FileCheckAndRun()
         {
-            Weather.PopulateArrayLists();
+            Weather.PopulateWeatherArrayLists();
+            Weather.PopulateLoginArrayLists();
             Application.Run(new Login());
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
         {
-            Weather.AddToDatabase();
+            Weather.AddWeatherDatabase();
         }
     }
 }

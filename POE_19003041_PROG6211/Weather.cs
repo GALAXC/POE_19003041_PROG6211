@@ -16,6 +16,11 @@ namespace POE_19003041_PROG6211
         private static readonly ArrayList windSpeeds = new ArrayList();
         private static readonly ArrayList newEntry = new ArrayList();
         private static readonly SqlConnection con = new SqlConnection();
+        private static readonly ArrayList usernameList = new ArrayList();
+        private static readonly ArrayList passwordList = new ArrayList();
+        private static readonly ArrayList userType = new ArrayList();
+        private static Boolean conStatus;
+        private static int usernameIndex;
 
         //Getters and Setters
         //City
@@ -101,8 +106,41 @@ namespace POE_19003041_PROG6211
             return Convert.ToString(windSpeeds[value]);
         }
 
+        //Username List
+        public static void AddUsername(object value)
+        {
+            usernameList.Add(value);
+        }
+
+        public static string GetUsername(int value)
+        {
+            return Convert.ToString(usernameList[value]);
+        }
+
+        //Password List
+        public static void AddPassword(object value)
+        {
+            passwordList.Add(value);
+        }
+
+        public static string GetPassword(int value)
+        {
+            return Convert.ToString(passwordList[value]);
+        }
+
+        //User Type
+        public static void AddUserType(object value)
+        {
+            userType.Add(value);
+        }
+
+        public static string GetUserType(int value)
+        {
+            return Convert.ToString(userType[value]);
+        }
+
         //Update Local Arrays with Values from File
-        public static void PopulateArrayLists()
+        public static void PopulateWeatherArrayLists()
         {
             cityNames.Clear();
             weatherDates.Clear();
@@ -136,29 +174,16 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        //Count the total lines in the weatherdata.txt file
-        public static int TotalLines(string filePath)
-        {
-            using (StreamReader r = new StreamReader(filePath))
-            {
-                int i = 0;
-                while (r.ReadLine() != null) { i++; }
-                return i;
-            }
-        }
-
+        //Temporary method for interacting with local database located in Web Form App Project
         private static void SetConnectionString()
         {
-            //Section for temporary local database storage for use in both projects (WEB + WINDOWS)
             String path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "../../../POE_19003041_PROG6211_WEB/App_Data");
             AppDomain.CurrentDomain.SetData("DataDirectory", path);
-            //
-
             con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\POE_Database.mdf;Integrated Security=True";
         }
 
         //Update database with new values based on if it was in the database before or not
-        public static void AddToDatabase()
+        public static void AddWeatherDatabase()
         {
             if (newEntry.Contains(true))
             {
@@ -178,6 +203,64 @@ namespace POE_19003041_PROG6211
                     }
                 }
             }
+        }
+
+        public static Boolean UpdateWeatherDatabase(String city, DateTime date, String min, String max, String precip, String humid, String wind, String oldCity, DateTime oldDate)
+        {
+            String command = String.Format("UPDATE TBL_WEATHER SET CITYNAME = '{0}', \"DATE\" = '{1}', MINTEMP = {2}, MAXTEMP = {3}, PRECIPITATION = {4}, HUMIDITY = {5}, WINDSPEED = {6} WHERE (CITYNAME = '{7}') AND (DATE = '{8}');", city, date, min, max, precip, humid, wind, oldCity, oldDate);
+            con.Open();
+            using (con)
+            {
+                SqlCommand sqlWeather = new SqlCommand(command, con);
+                try
+                {
+                    sqlWeather.ExecuteNonQuery();
+                    PopulateWeatherArrayLists();
+                    conStatus = true;
+                }
+                catch
+                {
+                    conStatus = false;
+                }
+            }
+
+            return conStatus;
+        }
+
+        public static Boolean PopulateLoginArrayLists()
+        {
+            String command = "SELECT * FROM TBL_LOGINDETAILS;";
+            SetConnectionString();
+            con.Open();
+            using (con)
+            {
+                SqlCommand SQLusernames = new SqlCommand(command, con);
+                try
+                {
+                    SqlDataReader usernames = SQLusernames.ExecuteReader();
+                    if (usernames.HasRows)
+                    {
+                        while (usernames.Read())
+                        {
+                            usernameList.Add(usernames.GetValue(0));
+                            passwordList.Add(usernames.GetValue(1));
+                            userType.Add(usernames.GetValue(2));
+                        }
+                    }
+                    conStatus = true;
+                }
+                catch
+                {
+                    conStatus = false;
+                }
+            }
+            return conStatus;
+        }
+
+        public static int GetIndexOfUsername(String username)
+        {
+            usernameIndex = usernameList.IndexOf(username);
+            return usernameIndex;
         }
     }
 }

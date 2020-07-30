@@ -12,7 +12,6 @@ namespace POE_19003041_PROG6211
         }
 
         private Boolean valuesGood = true;
-        private static readonly SqlConnection con = new SqlConnection();
 
         //Set up screen on log in
         private void Edit_Load(object sender, EventArgs e)
@@ -26,7 +25,7 @@ namespace POE_19003041_PROG6211
             }
         }
 
-        //Display details of result on click
+        //Display details of entry on click
         private void EditBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             cityBox.Text = Weather.GetCityName(editBox.SelectedIndex);
@@ -38,7 +37,7 @@ namespace POE_19003041_PROG6211
             windBox.Text = Weather.GetWindSpeed(editBox.SelectedIndex);
         }
 
-        //Update currently selected result with new details
+        //Update currently selected result with new details in textboxes
         private void UpdateButton_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("This will update the selected forecast with the new information you have entered.\nAre you sure?", "Update Forecast?", MessageBoxButtons.YesNo);
@@ -51,21 +50,17 @@ namespace POE_19003041_PROG6211
                     newPasswordCheck.ShowDialog();
                     if (PasswordCheck.allowUser == true)
                     {
-                        String path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "../../../POE_19003041_PROG6211_WEB/App_Data");
-                        AppDomain.CurrentDomain.SetData("DataDirectory", path);
-                        con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\POE_Database.mdf;Integrated Security=True";
-                        String command = String.Format("UPDATE TBL_WEATHER SET CITYNAME = '{0}', \"DATE\" = '{1}', MINTEMP = {2}, MAXTEMP = {3}, PRECIPITATION = {4}, HUMIDITY = {5}, WINDSPEED = {6} WHERE (CITYNAME = '{7}') AND (DATE = '{8}');", cityBox.Text, dateInputBox.Value, minTempBox.Text, maxTempBox.Text, precipBox.Text, humidBox.Text, windBox.Text, Weather.GetCityName(editBox.SelectedIndex), Weather.GetWeatherDate(editBox.SelectedIndex));
-                        con.Open();
-                        using (con)
+                        if (Weather.UpdateWeatherDatabase(cityBox.Text, dateInputBox.Value, minTempBox.Text, maxTempBox.Text, precipBox.Text, humidBox.Text, windBox.Text, Weather.GetCityName(editBox.SelectedIndex), Weather.GetWeatherDate(editBox.SelectedIndex)) == true)
                         {
-                            SqlCommand sqlWeather = new SqlCommand(command, con);
-                            sqlWeather.ExecuteNonQuery();
+                            MessageBox.Show("You have successfully updated this weather entry.");
+                            int oldIndex = editBox.SelectedIndex;
+                            UpdateUpdateBox();
+                            editBox.SelectedIndex = oldIndex;
                         }
-                        MessageBox.Show("You have successfully updated this weather entry.");
-                        Weather.PopulateArrayLists();
-                        int oldIndex = editBox.SelectedIndex;
-                        UpdateUpdateBox();
-                        editBox.SelectedIndex = oldIndex;
+                        else
+                        {
+                            MessageBox.Show("There was an error performing this action.\nDatabase likely not connected correctly.");
+                        }
                     }
                 }
                 else
