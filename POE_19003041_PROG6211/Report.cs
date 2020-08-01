@@ -33,8 +33,6 @@ namespace POE_19003041_PROG6211
                 label6.Text = "Welcome, " + Login.loggedInUser + ".";
                 label6.Location = new System.Drawing.Point((557 - (label6.Size.Width / 2)), 37);
                 firstTimeLoad = false;
-                GetUsualCities();
-                UpdateCityBox();
             }
             if (Login.isUserAdmin == false)
             {
@@ -43,6 +41,8 @@ namespace POE_19003041_PROG6211
                 viewStrip.Visible = false;
                 searchButton.Location = new System.Drawing.Point(65, 319);
             }
+            GetUsualCities();
+            UpdateCityBox();
         }
 
         //
@@ -68,7 +68,6 @@ namespace POE_19003041_PROG6211
         //Update cities on click
         private void CityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            editMade[users.IndexOf(Login.loggedInUser)] = true;
             if (citiesSelected.Contains(cityComboBox.SelectedItem))
             {
                 citiesSelected.Remove(cityComboBox.SelectedItem);
@@ -77,6 +76,7 @@ namespace POE_19003041_PROG6211
             {
                 citiesSelected.Add(cityComboBox.SelectedItem);
             }
+            editMade[users.IndexOf(Login.loggedInUser)] = true;
             UpdateDBArrayLists();
             UpdateCityBox();
         }
@@ -183,7 +183,6 @@ namespace POE_19003041_PROG6211
                     {
                         SqlCommand sqlNewUser = new SqlCommand(command, con);
                         sqlNewUser.ExecuteNonQuery();
-                        MessageBox.Show("New User Added to User Cities Database!");
                     }
                 }
                 else
@@ -197,7 +196,6 @@ namespace POE_19003041_PROG6211
                         {
                             SqlCommand sqlEditMade = new SqlCommand(command2, con);
                             sqlEditMade.ExecuteNonQuery();
-                            MessageBox.Show("Edit updated in User Cities Database!");
                         }
                     }
                 }

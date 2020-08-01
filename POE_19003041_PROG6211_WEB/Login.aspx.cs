@@ -41,7 +41,7 @@ namespace POE_19003041_PROG6211_WEB
                 startLogin.FailureText = "Your login attempt was not successful. Please try again.";
                 if (startLogin.Password == Convert.ToString(passwordList[usernameList.IndexOf(startLogin.UserName)]))
                 {
-                    Response.Redirect("~/About");
+                    Response.Redirect("~/Report");
                 }
             }
         }

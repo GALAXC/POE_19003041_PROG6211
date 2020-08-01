@@ -49,7 +49,7 @@ namespace POE_19003041_PROG6211
                     PasswordCheck newPasswordCheck = new PasswordCheck();
                     newPasswordCheck.ShowDialog();
                     if (PasswordCheck.allowUser == true)
-                    {
+                    {                        
                         if (Weather.UpdateWeatherDatabase(cityBox.Text, dateInputBox.Value, minTempBox.Text, maxTempBox.Text, precipBox.Text, humidBox.Text, windBox.Text, Weather.GetCityName(editBox.SelectedIndex), Weather.GetWeatherDate(editBox.SelectedIndex)) == true)
                         {
                             MessageBox.Show("You have successfully updated this weather entry.");

@@ -207,6 +207,7 @@ namespace POE_19003041_PROG6211
 
         public static Boolean UpdateWeatherDatabase(String city, DateTime date, String min, String max, String precip, String humid, String wind, String oldCity, DateTime oldDate)
         {
+            SetConnectionString();
             String command = String.Format("UPDATE TBL_WEATHER SET CITYNAME = '{0}', \"DATE\" = '{1}', MINTEMP = {2}, MAXTEMP = {3}, PRECIPITATION = {4}, HUMIDITY = {5}, WINDSPEED = {6} WHERE (CITYNAME = '{7}') AND (DATE = '{8}');", city, date, min, max, precip, humid, wind, oldCity, oldDate);
             con.Open();
             using (con)
@@ -215,7 +216,6 @@ namespace POE_19003041_PROG6211
                 try
                 {
                     sqlWeather.ExecuteNonQuery();
-                    PopulateWeatherArrayLists();
                     conStatus = true;
                 }
                 catch
@@ -223,7 +223,7 @@ namespace POE_19003041_PROG6211
                     conStatus = false;
                 }
             }
-
+            PopulateWeatherArrayLists();
             return conStatus;
         }
 
