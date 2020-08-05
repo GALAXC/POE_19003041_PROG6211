@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace POE_19003041_PROG6211_WEB
 {
-    public partial class SiteMaster : MasterPage
+    public partial class About : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

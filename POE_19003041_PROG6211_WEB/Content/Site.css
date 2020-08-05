@@ -2,20 +2,22 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-    max-width: 280px;
+.container {
+    width: 90%;
 }
 
 /* Responsive: Portrait tablets and up */
@@ -27,4 +29,98 @@ textarea {
     .body-content {
         padding: 0;
     }
+}
+
+/* Whole Page Layout */
+.column {
+    float: left;
+    padding: 10px;
+    margin: auto;
+}
+
+    .column.side {
+        width: 20%;
+        background: red;
+        text-align: center;
+    }
+
+    .column.middle {
+        width: 60%;
+        background: green;
+        text-align: center;
+    }
+
+.wrapper {
+    text-align: center;
+}
+
+.mainWrapper:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media screen and (max-width: 1230px) {
+    .column.side, .column.middle {
+        width: 100%;
+    }
+}
+
+#print {
+    padding: 10px;
+    display: inline-block;
+    margin: auto;
+}
+
+#search {
+    padding: 10px;
+    display: inline-block;
+    margin: auto;
+}
+
+#buttons {
+    margin: auto;
+}
+
+#cityName {
+    padding: 20px;
+    width: 240px;
+    display: inline-block;
+}
+
+#date1 {
+    padding: 20px;
+    display: inline-block;
+}
+
+#date2 {
+    padding: 20px;
+    display: inline-block;
+}
+
+.topMiddle {
+    padding-bottom: 20px;
+}
+
+.cityReportBox {
+    max-width: 2000px;
+    width: 500px;
+    height: 50px;
+}
+
+.citiesBox {
+    width: 500px;
+    display: inline-block;
+    margin-top: 20px;
+    padding: 5px;
+}
+
+.Label1 {
+    font-weight: 600;
+}
+
+.clearButton {
+    padding: 5px;
+    display: inline-block;
+    overflow: hidden;
 }

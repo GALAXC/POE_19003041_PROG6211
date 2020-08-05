@@ -8,7 +8,7 @@ namespace POE_19003041_PROG6211_WEB
 {
     public partial class Login : System.Web.UI.Page
     {
-        private SqlConnection con = new SqlConnection();
+        private static readonly SqlConnection con = new SqlConnection();
         private ArrayList usernameList;
         private ArrayList passwordList;
 

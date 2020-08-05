@@ -78,11 +78,11 @@
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loginStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.userTypeLoginStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.printReportButton = new System.Windows.Forms.Button();
             this.viewStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.captureStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.updateStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.usersStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.printReportButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.reportTable)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -610,17 +610,6 @@
             this.userTypeLoginStrip.Size = new System.Drawing.Size(184, 22);
             this.userTypeLoginStrip.Text = "User Type: Forecaster";
             // 
-            // printReportButton
-            // 
-            this.printReportButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.printReportButton.Location = new System.Drawing.Point(10, 319);
-            this.printReportButton.Name = "printReportButton";
-            this.printReportButton.Size = new System.Drawing.Size(75, 23);
-            this.printReportButton.TabIndex = 168;
-            this.printReportButton.Text = "Print Report";
-            this.printReportButton.UseVisualStyleBackColor = true;
-            this.printReportButton.Click += new System.EventHandler(this.PrintReportButton_Click);
-            // 
             // viewStrip
             // 
             this.viewStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -634,23 +623,34 @@
             // captureStrip
             // 
             this.captureStrip.Name = "captureStrip";
-            this.captureStrip.Size = new System.Drawing.Size(180, 22);
+            this.captureStrip.Size = new System.Drawing.Size(116, 22);
             this.captureStrip.Text = "Capture";
             this.captureStrip.Click += new System.EventHandler(this.CaptureStrip_Click);
             // 
             // updateStrip
             // 
             this.updateStrip.Name = "updateStrip";
-            this.updateStrip.Size = new System.Drawing.Size(180, 22);
+            this.updateStrip.Size = new System.Drawing.Size(116, 22);
             this.updateStrip.Text = "Update";
             this.updateStrip.Click += new System.EventHandler(this.UpdateStrip_Click);
             // 
             // usersStrip
             // 
             this.usersStrip.Name = "usersStrip";
-            this.usersStrip.Size = new System.Drawing.Size(180, 22);
+            this.usersStrip.Size = new System.Drawing.Size(116, 22);
             this.usersStrip.Text = "Users";
             this.usersStrip.Click += new System.EventHandler(this.UsersStrip_Click);
+            // 
+            // printReportButton
+            // 
+            this.printReportButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.printReportButton.Location = new System.Drawing.Point(10, 319);
+            this.printReportButton.Name = "printReportButton";
+            this.printReportButton.Size = new System.Drawing.Size(75, 23);
+            this.printReportButton.TabIndex = 168;
+            this.printReportButton.Text = "Print Report";
+            this.printReportButton.UseVisualStyleBackColor = true;
+            this.printReportButton.Click += new System.EventHandler(this.PrintReportButton_Click);
             // 
             // Report
             // 
