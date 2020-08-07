@@ -8,9 +8,10 @@ namespace POE_19003041_PROG6211_WEB
 {
     public partial class Login : System.Web.UI.Page
     {
-        private SqlConnection con = new SqlConnection();
+        private readonly SqlConnection con = new SqlConnection();
         private ArrayList usernameList;
         private ArrayList passwordList;
+        public static String loggedInUser = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -41,6 +42,7 @@ namespace POE_19003041_PROG6211_WEB
                 startLogin.FailureText = "Your login attempt was not successful. Please try again.";
                 if (startLogin.Password == Convert.ToString(passwordList[usernameList.IndexOf(startLogin.UserName)]))
                 {
+                    loggedInUser = startLogin.UserName;
                     Response.Redirect("~/Report");
                 }
             }

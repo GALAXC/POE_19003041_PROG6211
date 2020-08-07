@@ -17,11 +17,6 @@ namespace POE_19003041_PROG6211_WEB
         private static readonly ArrayList windSpeeds = new ArrayList();
         private static readonly ArrayList newEntry = new ArrayList();
         private static readonly SqlConnection con = new SqlConnection();
-        private static readonly ArrayList usernameList = new ArrayList();
-        private static readonly ArrayList passwordList = new ArrayList();
-        private static readonly ArrayList userType = new ArrayList();
-        private static Boolean conStatus;
-        private static int usernameIndex;
 
         //Getters and Setters
         //City
@@ -140,14 +135,6 @@ namespace POE_19003041_PROG6211_WEB
                     }
                 }
             }
-        }
-
-        //Temporary method for interacting with local database located in Web Form App Project
-        private static void SetConnectionString()
-        {
-            //String path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "../../POE_19003041_PROG6211_WEB/App_Data");
-            //AppDomain.CurrentDomain.SetData("DataDirectory", path);
-            con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\POE_Database.mdf;Integrated Security=True";
         }
     }
 }

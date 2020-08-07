@@ -3,6 +3,16 @@ body {
     padding-top: 50px;
     padding-bottom: 20px;
     margin: 0;
+    background-image: url('Images/Cloudy Background.jpeg');
+    background-position: top right;
+    background-size: cover;
+    font-size: 1vw;
+}
+
+@media (max-width: 1230px) {
+    body {
+        font-size: 12px;
+    }
 }
 
 * {
@@ -32,40 +42,49 @@ body {
 }
 
 /* Whole Page Layout */
+
+.label {
+    color: white;
+    font-weight: 600;
+}
+
 .column {
     float: left;
     padding: 10px;
     margin: auto;
+    background: rgba(0, 0, 0, 0.3);
 }
 
     .column.side {
         width: 20%;
-        background: red;
+        /*        background: red;*/
         text-align: center;
     }
 
     .column.middle {
         width: 60%;
-        background: green;
+        /*        background: green;*/
         text-align: center;
     }
 
-.wrapper {
-    text-align: center;
-}
-
-.mainWrapper:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-@media screen and (max-width: 1230px) {
+@media screen and (max-width: 1320px) {
     .column.side, .column.middle {
         width: 100%;
     }
 }
 
+/*Whole Page container*/
+.mainWrapper {
+    text-align: center;
+}
+
+    .mainWrapper:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+/*Left Column*/
 #print {
     padding: 10px;
     display: inline-block;
@@ -86,41 +105,106 @@ body {
     padding: 20px;
     width: 240px;
     display: inline-block;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 865px) {
+    #cityName, #date1, #date2 {
+        display: block;
+    }
+
+    #cityName {
+        width: 100%;
+    }
 }
 
 #date1 {
     padding: 20px;
     display: inline-block;
+    overflow: hidden;
+}
+
+.date {
+    background: white;
 }
 
 #date2 {
     padding: 20px;
     display: inline-block;
+    overflow: hidden;
 }
 
+/*Middle Column*/
 .topMiddle {
-    padding-bottom: 20px;
+    padding: 0 20px 20px 20px;
 }
 
 .cityReportBox {
     max-width: 2000px;
-    width: 500px;
-    height: 50px;
+    width: 100%;
+    height: 60px;
 }
 
 .citiesBox {
-    width: 500px;
+    width: 100%;
     display: inline-block;
     margin-top: 20px;
     padding: 5px;
-}
-
-.Label1 {
-    font-weight: 600;
 }
 
 .clearButton {
     padding: 5px;
     display: inline-block;
     overflow: hidden;
+}
+
+.Gridview {
+    float: none;
+    background: white;
+    font-size: 0.8vw;
+}
+
+@media screen and (max-width: 1500px) {
+    .Gridview {
+        font-size: 16px;
+    }
+}
+
+.theGrid {
+    display: inline-block;
+}
+
+/*Right Column*/
+.statistics {
+    width: 100%;
+    height: auto;
+    background: green;
+}
+
+.results {
+    float: left;
+    width: 50%;
+    color: white;
+    font-size: 1.2vw;
+    font-weight: 600;
+}
+
+.smallResults {
+    font-weight: 200;
+}
+
+.stats {
+    width: 100%;
+    display: table;
+    font-size: 0.8vw;
+}
+
+@media (max-width: 1230px) {
+    .results {
+        font-size: 16px;
+    }
+
+    .stats {
+        font-size: 12px;
+    }
 }
