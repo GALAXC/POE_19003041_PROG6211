@@ -24,30 +24,34 @@ namespace POE_19003041_PROG6211_WEB
         //Perform housekeeping on page load
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (WebWeather.allowUser == false)
             {
-                WebWeather.PopulateWeatherArrayLists();
-                dt = new DataTable();
-                dt.Columns.Add(new DataColumn("City", typeof(string)));
-                dt.Columns.Add(new DataColumn("Date", typeof(string)));
-                dt.Columns.Add(new DataColumn("Min Temp", typeof(string)));
-                dt.Columns.Add(new DataColumn("Max Temp", typeof(string)));
-                dt.Columns.Add(new DataColumn("Precipitation", typeof(string)));
-                dt.Columns.Add(new DataColumn("Humidity", typeof(string)));
-                dt.Columns.Add(new DataColumn("Wind Speed", typeof(string)));
-
-                DataRow row = dt.NewRow();
-                dt.Rows.Add(row);
-                reportGrid.DataSource = dt;
-                reportGrid.DataBind();
-                SecondDate_SelectionChanged(sender, e);
-                PopulateCityComboBox();
+                Response.Redirect("~/Login");
             }
-            //Temp Test
-            Login.loggedInUser = "Pranav";
-            //Temp Test
-            GetUsualCities();
-            UpdateCityBox();
+            else
+            {
+                if (!IsPostBack)
+                {
+                    WebWeather.PopulateWeatherArrayLists();
+                    dt = new DataTable();
+                    dt.Columns.Add(new DataColumn("City", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Date", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Min Temp", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Max Temp", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Precipitation", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Humidity", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Wind Speed", typeof(string)));
+
+                    DataRow row = dt.NewRow();
+                    dt.Rows.Add(row);
+                    reportGrid.DataSource = dt;
+                    reportGrid.DataBind();
+                    SecondDate_SelectionChanged(sender, e);
+                    PopulateCityComboBox();
+                }
+                GetUsualCities();
+                UpdateCityBox();
+            }
         }
 
         //Update gridview with requested weather data

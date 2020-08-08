@@ -17,6 +17,7 @@ namespace POE_19003041_PROG6211_WEB
         private static readonly ArrayList windSpeeds = new ArrayList();
         private static readonly ArrayList newEntry = new ArrayList();
         private static readonly SqlConnection con = new SqlConnection();
+        public static Boolean allowUser = false;
 
         //Getters and Setters
         //City

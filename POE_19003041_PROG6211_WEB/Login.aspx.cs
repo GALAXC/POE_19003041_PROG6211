@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace POE_19003041_PROG6211_WEB
@@ -15,6 +16,9 @@ namespace POE_19003041_PROG6211_WEB
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Master.FindControl("logoutBtn").Visible = false;
+            WebWeather.allowUser = false;
+            Login.loggedInUser = null;
             String command = "SELECT * FROM TBL_LOGINDETAILS;";
             con.ConnectionString = ConfigurationManager.ConnectionStrings["POEConnection"].ConnectionString;
             con.Open();
@@ -42,8 +46,10 @@ namespace POE_19003041_PROG6211_WEB
                 startLogin.FailureText = "Your login attempt was not successful. Please try again.";
                 if (startLogin.Password == Convert.ToString(passwordList[usernameList.IndexOf(startLogin.UserName)]))
                 {
+                    WebWeather.allowUser = true;
                     loggedInUser = startLogin.UserName;
                     Response.Redirect("~/Report");
+                    Master.FindControl("logoutBtn").Visible = false;
                 }
             }
         }

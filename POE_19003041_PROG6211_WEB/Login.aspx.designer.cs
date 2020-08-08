@@ -15,13 +15,13 @@ namespace POE_19003041_PROG6211_WEB
     {
 
         /// <summary>
-        /// lblWelcome control.
+        /// welcomeLbl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblWelcome;
+        protected global::System.Web.UI.WebControls.Label welcomeLbl;
 
         /// <summary>
         /// startLogin control.
