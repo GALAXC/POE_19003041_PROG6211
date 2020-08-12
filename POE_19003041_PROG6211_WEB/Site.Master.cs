@@ -13,6 +13,7 @@ namespace POE_19003041_PROG6211_WEB
         {
         }
 
+        //Logout button
         protected void LogoutBtn_Click(object sender, EventArgs e)
         {
             WebWeather.allowUser = false;

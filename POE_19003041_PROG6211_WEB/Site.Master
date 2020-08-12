@@ -40,7 +40,7 @@
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" runat="server" href="~/Report">Weather Forecaster</a>
+                    <a class="navbar-brand" runat="server" href="~/">Weather Forecaster</a>
                     <a href="/Login" class="navbar-brand" runat="server" id="logoutBtn">Logout</a>
                 </div>
             </div>

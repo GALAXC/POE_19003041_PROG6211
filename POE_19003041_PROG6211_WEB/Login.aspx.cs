@@ -14,6 +14,7 @@ namespace POE_19003041_PROG6211_WEB
         private ArrayList passwordList;
         public static String loggedInUser = "";
 
+        //Setup login page on load
         protected void Page_Load(object sender, EventArgs e)
         {
             Master.FindControl("logoutBtn").Visible = false;
@@ -39,6 +40,7 @@ namespace POE_19003041_PROG6211_WEB
             }
         }
 
+        //Authenticate Login Details
         protected void StartLogin_Authenticate(object sender, AuthenticateEventArgs e)
         {
             if (usernameList.Contains(startLogin.UserName))
@@ -48,7 +50,7 @@ namespace POE_19003041_PROG6211_WEB
                 {
                     WebWeather.allowUser = true;
                     loggedInUser = startLogin.UserName;
-                    Response.Redirect("~/Report");
+                    Response.Redirect("~/");
                     Master.FindControl("logoutBtn").Visible = false;
                 }
             }
